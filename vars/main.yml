@@ -1,0 +1,201 @@
+---
+# Setting to generate files.
+
+# Settings to Docker containers.
+docker_namespace: buluma
+docker_image: fedora
+docker_tag: latest
+
+# References to travis use a namespace, this is likely your username on Travis.
+travis_namespace: buluma
+
+# Documentation refers to Ansible Galaxy. this is likely your username on Galaxy.
+galaxy_namespace: buluma
+
+# Your username/organization name on GitHub.
+github_namespace: buluma
+
+# Your name and optionally email-address.
+author: Michael Buluma (me@buluma.co.ke)
+
+# The full URL to your website.
+author_website: "https://buluma.co.ke/"
+
+platform_image_mapping:
+  Alpine: alpine
+  Amazon: amazonlinux
+  Archlinux: archlinux
+  Debian: debian
+  EL: "{{ enterprise_linux | default('enterpriselinux') }}"
+  Fedora: fedora
+  OpenSUSE: opensuse
+  Ubuntu: ubuntu
+
+# This maps the Galaxy distribution and version to Docker images.
+distribution_version_mapping:
+  Alpine:
+    all:
+      - latest
+  Amazon:
+    all:
+      - 1
+      - latest
+    2018.03:
+      - 1
+    Candidate:
+      - latest
+  Archlinux:
+    all:
+      - latest
+  Debian:
+    all:
+      - latest
+      - bookworm
+    bullseye:
+      - latest
+    bookworm:
+      - bookworm
+  EL:
+    all:
+      - 7
+      - latest
+    7:
+      - 7
+    8:
+      - latest
+  Fedora:
+    all:
+      - 34
+      - latest
+      - rawhide
+    34:
+      - 34
+    35:
+      - latest
+    36:
+      - rawhide
+  OpenSUSE:
+    all:
+      - latest
+  Ubuntu:
+    all:
+      - latest
+      - bionic
+    focal:
+      - latest
+    bionic:
+      - bionic
+
+letter_day_mapping:
+  a: 1
+  b: 2
+  c: 3
+  d: 4
+  e: 5
+  f: 6
+  g: 7
+  h: 8
+  i: 9
+  j: 10
+  k: 11
+  l: 12
+  m: 13
+  n: 14
+  o: 15
+  p: 16
+  q: 17
+  r: 18
+  s: 19
+  t: 20
+  u: 21
+  v: 22
+  w: 23
+  x: 24
+  y: 25
+  z: 26
+  0: 27
+  1: 27
+  2: 27
+  3: 27
+  4: 27
+  5: 27
+  6: 27
+  7: 27
+  8: 27
+  9: 27
+
+letter_hour_mapping:
+  a: 1
+  b: 2
+  c: 3
+  d: 4
+  e: 5
+  f: 6
+  g: 7
+  h: 8
+  i: 9
+  j: 10
+  k: 11
+  l: 12
+  m: 13
+  n: 14
+  o: 15
+  p: 16
+  q: 17
+  r: 18
+  s: 19
+  t: 20
+  u: 21
+  v: 22
+  w: 22
+  x: 22
+  y: 22
+  z: 22
+  0: 23
+  1: 23
+  2: 23
+  3: 23
+  4: 23
+  5: 23
+  6: 23
+  7: 23
+  8: 23
+  9: 23
+
+letter_minute_mapping:
+  a: 1
+  b: 3
+  c: 5
+  d: 7
+  e: 9
+  f: 11
+  g: 13
+  h: 15
+  i: 17
+  j: 19
+  k: 21
+  l: 23
+  m: 25
+  n: 27
+  o: 29
+  p: 31
+  q: 33
+  r: 35
+  s: 37
+  t: 39
+  u: 41
+  v: 43
+  w: 45
+  x: 47
+  y: 49
+  z: 51
+  0: 53
+  1: 55
+  2: 57
+  3: 59
+  4: 59
+  5: 59
+  6: 59
+  7: 59
+  8: 59
+  9: 59

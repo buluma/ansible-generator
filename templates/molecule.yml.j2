@@ -1,0 +1,27 @@
+---
+{{ ansible_managed | comment }}
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements.yml
+    requirements-file: requirements.yml
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+driver:
+  name: docker
+platforms:
+  - name: "{{ role_name | regex_replace('_', '') }}-${image:-{{ docker_image }}}-${tag:-{{ docker_tag }}}${TOX_ENVNAME}"
+    image: "${namespace:-{{ docker_namespace }}}/${image:-{{ docker_image }}}:${tag:-{{ docker_tag }}}"
+    command: /sbin/init
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: yes
+    pre_build_image: yes
+provisioner:
+  name: ansible
+{% if verify.stat.exists  %}
+verifier:
+  name: ansible
+{% endif %}
