@@ -10,7 +10,7 @@
 
   vars_files:
     - vars/main.yml
-    - vars/vault.yml
+    # - vars/vault.yml
 
   tasks:
     - name: see if all veriables are set
