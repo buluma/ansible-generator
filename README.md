@@ -64,7 +64,7 @@ galaxy_namespace: buluma
 github_namespace: buluma
 
 # Your name and optionally email-address.
-author: Robert de Bock (robert@meinit.nl)
+author: Michael Buluma (me@buluma.co.ke)
 
 # The full URL to your website.
 author_website: "https://buluma.co.ke/"
