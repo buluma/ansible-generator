@@ -88,4 +88,4 @@
           description: "Monthly test"
           ref: master
           cron: "{{ letter_minute_mapping[role[15]] | default('13') }} {{ letter_hour_mapping[role[13]] }} {{ letter_day_mapping[role[13]] }} * *"
-          cron_timezone: Amsterdam
+          cron_timezone: Nairobi

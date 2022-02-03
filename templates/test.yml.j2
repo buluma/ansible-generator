@@ -1,0 +1,23 @@
+---
+{{ ansible_managed | comment }}
+
+on:
+  pull_request:
+  push:
+    paths:
+      - '.github/workflows/test.yml'
+  schedule:
+    - cron: '20 1,20 * * *'
+  workflow_dispatch:
+
+name: Test Role
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: test role install
+        run: ansible-galaxy install {{ github_namespace }}/ansible-role-{{ role_name }}
+
+      - name: get role info
+        run: ansible-galaxy info {{ github_namespace }}/ansible-role-{{ role_name }}

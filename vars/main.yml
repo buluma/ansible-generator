@@ -19,7 +19,7 @@ github_namespace: buluma
 author: Michael Buluma (me@buluma.co.ke)
 
 # The full URL to your website.
-author_website: "https://buluma.co.ke/"
+author_website: "https://buluma.github.io/"
 
 platform_image_mapping:
   Alpine: alpine

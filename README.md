@@ -35,6 +35,9 @@ This script writes output to:
 - .ansible-lint*
 - .github/workflows/ansible.yml
 - .github/workflows/galaxy.yml
+- .github/workflows/release_drafter.yml
+- .github/dependabot.yml
+- .github/release-drafter.yml
 
 ## Usage
 
@@ -67,7 +70,7 @@ github_namespace: buluma
 author: Michael Buluma (me@buluma.co.ke)
 
 # The full URL to your website.
-author_website: "https://buluma.co.ke/"
+author_website: "https://buluma.github.io/"
 ```
 
 ## meta/version.yml

@@ -174,6 +174,12 @@
           dest: .github/workflows/galaxy.yml
         - source: todo-action.yml
           dest: .github/workflows/todo.yml
+        - source: release_drafter.yml
+          dest: .github/workflows/release_drafter.yml
+        - source: release-drafter.yml
+          dest: .github/release-drafter.yml
+        - source: dependabot.yml
+          dest: .github/dependabot.yml
         - source: gitlab-ci.yml
           dest: .gitlab-ci.yml
         - source: requirements.txt
