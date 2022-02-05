@@ -22,14 +22,14 @@ author: Michael Buluma (me@buluma.co.ke)
 author_website: "https://buluma.github.io/"
 
 platform_image_mapping:
-  Alpine: alpine
+  Alpine: alpine-openrc
   Amazon: amazonlinux
   Archlinux: archlinux
   Debian: debian-systemd
   EL: "{{ enterprise_linux | default('enterpriselinux') }}"
-  Fedora: fedora
+  Fedora: fedora-systemd
   OpenSUSE: opensuse
-  Ubuntu: ubuntu
+  Ubuntu: docker-ubuntu-systemd
 
 # This maps the Galaxy distribution and version to Docker images.
 distribution_version_mapping:

@@ -25,6 +25,24 @@ molecule:
 {% endfor %}
 {% endfor %}
 
+testing:
+  script:
+    - image=${image} tag=${tag} molecule test
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "testing"
+  retry: 1
+  parallel:
+    matrix:
+{% for platform in meta.galaxy_info.platforms %}
+{% for version in platform.versions %}
+{% for tag in distribution_version_mapping[platform.name][version] %}
+      - image: "{{ platform_image_mapping[platform.name] }}"
+        tag: "{{ tag }}"
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
 galaxy:
   script:
-    - ansible-galaxy role info ${CI_PROJECT_NAMESPACE}.${CI_PROJECT_NAME}
+    # - ansible-galaxy role info ${CI_PROJECT_NAMESPACE}.${CI_PROJECT_NAME}
+    - ansible-galaxy role info {{ github_namespace }}.{{ role_name }}
