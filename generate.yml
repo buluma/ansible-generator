@@ -176,6 +176,8 @@
           dest: .github/workflows/todo.yml
         - source: release_drafter.yml
           dest: .github/workflows/release_drafter.yml
+        - source: gitlab_trigger.yml
+          dest: .github/workflows/gitlab_trigger.yml
         - source: release-drafter.yml
           dest: .github/release-drafter.yml
         - source: dependabot.yml

@@ -25,7 +25,7 @@ platform_image_mapping:
   Alpine: alpine
   Amazon: amazonlinux
   Archlinux: archlinux
-  Debian: debian
+  Debian: debian-systemd
   EL: "{{ enterprise_linux | default('enterpriselinux') }}"
   Fedora: fedora
   OpenSUSE: opensuse
