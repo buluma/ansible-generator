@@ -11,10 +11,10 @@ jobs:
       - name: Mirror + trigger CI
         uses: SvanBoxel/gitlab-mirror-and-ci-action@master
         with:
-          args: "buluma/ansible-role-npm"
+          args: "{{ github_namespace }}/ansible-role-{{ role_name }}"
         env:
           GITLAB_HOSTNAME: "gitlab.com"
           GITLAB_USERNAME: "{{ github_namespace }}"
           GITLAB_PASSWORD: {% raw %}${{ secrets.GITLAB_PASSWORD }}{% endraw %}
-          GITLAB_PROJECT_ID: "33417016"   # TODO: Needs to be updated
+          GITLAB_PROJECT_ID: "33417016x"   # TODO: Needs to be updated
           GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}

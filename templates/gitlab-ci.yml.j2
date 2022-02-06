@@ -44,5 +44,4 @@ testing:
 
 galaxy:
   script:
-    # - ansible-galaxy role info ${CI_PROJECT_NAMESPACE}.${CI_PROJECT_NAME}
     - ansible-galaxy role info {{ github_namespace }}.{{ role_name }}
