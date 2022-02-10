@@ -45,3 +45,7 @@ testing:
 galaxy:
   script:
     - ansible-galaxy role info {{ github_namespace }}.{{ role_name }}
+
+test_role:
+  script:
+    - ansible-galaxy install {{ github_namespace }}.{{ role_name }}
