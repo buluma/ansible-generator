@@ -81,8 +81,9 @@ distribution_version_mapping:
     all:
       - latest
       - bionic
+      - focal
     focal:
-      - latest
+      - focal
     bionic:
       - bionic
 

@@ -1,0 +1,194 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: generate all files
+  hosts: localhost
+  become: no
+  gather_facts: yes
+  gather_subset:
+    - min
+
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: set role_path and role_name
+      set_fact:
+        role_path: "{{ lookup('env', 'PWD') }}"
+        role_name: "{{ lookup('env', 'PWD') | basename | regex_replace('ansible-role-') }}"
+
+    - name: load meta/main.yml
+      include_vars:
+        file: "{{ role_path }}/meta/main.yml"
+        name: meta
+
+    - name: check meta/version.yml
+      stat:
+        path: "{{ role_path }}/meta/version.yml"
+      register: versionymlstat
+
+    - name: load meta/version.yml
+      include_vars:
+        file: "{{ role_path }}/meta/version.yml"
+      register: versionyml
+      when:
+        - versionymlstat.stat.exists | bool
+    - name: check meta/exception.yml
+      stat:
+        path: "{{ role_path }}/meta/exception.yml"
+      register: exceptionymlstat
+
+    - name: load meta/exception.yml
+      include_vars:
+        file: "{{ role_path }}/meta/exception.yml"
+      register: exceptionyml
+      when:
+        - exceptionymlstat.stat.exists | bool
+
+    - name: check meta/preferences.yml
+      stat:
+        path: "{{ role_path }}/meta/preferences.yml"
+      register: preferencesymlstat
+
+    - name: load meta/preferences.yml
+      include_vars:
+        file: "{{ role_path }}/meta/preferences.yml"
+      when:
+        - preferencesymlstat.stat.exists | bool
+
+    - name: check defaults/main.yml
+      stat:
+        path: "{{ role_path }}/defaults/main.yml"
+      register: defaultsmainyml
+
+    - name: load defaults/main.yml
+      slurp:
+        src: "{{ role_path }}/defaults/main.yml"
+      register: variables
+      when:
+        - defaultsmainyml.stat.exists | bool
+
+    - name: check requirements.yml
+      stat:
+        path: "{{ role_path }}/requirements.yml"
+      register: check_requirements
+
+    - name: load requirements.yml
+      include_vars:
+        file: "{{ role_path }}/requirements.yml"
+        name: requirements
+      when:
+        - check_requirements.stat.exists | bool
+
+    - name: load molecule/default/converge.yml
+      slurp:
+        src: "{{ role_path }}/molecule/default/converge.yml"
+      register: example
+
+    - name: check molecule/default/prepare.yml
+      stat:
+        path: "{{ role_path }}/molecule/default/prepare.yml"
+      register: check_prepare
+
+    - name: load molecule/default/prepare.yml
+      slurp:
+        src: "{{ role_path }}/molecule/default/prepare.yml"
+      register: prepare
+      when:
+        - check_prepare.stat.exists | bool
+
+    - name: check molecule/default/verify.yml
+      stat:
+        path: "{{ role_path }}/molecule/default/verify.yml"
+      register: verify
+
+    - name: load molecule/default/verify.yml
+      slurp:
+        src: "{{ role_path }}/molecule/default/verify.yml"
+      register: verifyyml
+      when:
+        - verify.stat.exists | bool
+
+    - name: check molecule/default/defaults.yml
+      stat:
+        path: "{{ role_path }}/molecule/default/defaults.yml"
+      register: defaults
+
+    - name: load galaxy_id
+      shell: "set -o pipefail ; ansible-galaxy info buluma.{{ role_name }} | grep '	id: ' | awk '{print $NF}'"
+      register: galaxy_id
+      changed_when: no
+      failed_when: no
+
+    - name: create .github directories
+      file:
+        path: "{{ role_path }}/{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - .github
+        - .github/workflows
+        - .github/ISSUE_TEMPLATE
+
+    - name: copy file
+      copy:
+        src: "{{ playbook_dir }}/files/{{ item.source }}"
+        dest: "{{ role_path }}/{{ item.dest | default(item.source) }}"
+        mode: "{{ item.mode | default('0644') }}"
+      with_items:
+        - source: bug_report.md
+          dest: .github/ISSUE_TEMPLATE/bug_report.md
+        - source: feature_request.md
+          dest: .github/ISSUE_TEMPLATE/feature_request.md
+        - source: gitignore
+          dest: .gitignore
+        - source: yamllint
+          dest: .yamllint
+        - source: pre-commit-config.yaml
+          dest: .pre-commit-config.yaml
+      loop_control:
+        label: "{{ item.source }}"
+
+    - name: render file
+      template:
+        src: "{{ playbook_dir }}/templates/{{ item.source }}.j2"
+        dest: "{{ role_path }}/{{ item.dest | default (item.source) }}"
+        mode: "0644"
+      with_items:
+        - source: ansible-lint
+          dest: .ansible-lint
+        - source: tox.ini
+        - source: settings.yml
+          dest: .github/settings.yml
+        - source: LICENSE-2.0.txt
+          dest: LICENSE
+        - source: SECURITY.md
+        - source: travis.yml
+          dest: .travis.yml
+        - source: molecule.yml
+          dest: molecule/default/molecule.yml
+        - source: README.md
+        - source: CONTRIBUTING.md
+        - source: molecule-action.yml
+          dest: .github/workflows/molecule.yml
+        - source: galaxy.yml
+          dest: .github/workflows/galaxy.yml
+        - source: todo-action.yml
+          dest: .github/workflows/todo.yml
+        - source: release_drafter.yml
+          dest: .github/workflows/release_drafter.yml
+        - source: release-drafter.yml
+          dest: .github/release-drafter.yml
+        - source: dependabot.yml
+          dest: .github/dependabot.yml
+        - source: gitlab-ci.yml
+          dest: .gitlab-ci.yml
+        - source: requirements.txt
+        - source: requirements2png.yml
+          dest: .github/workflows/requirements2png.yml
+      loop_control:
+        label: "{{ item.source }}"
+    # Skip pre-commit install for now
+    # - name: pre-commit install
+    #  command: pre-commit install
+    #  args:
+    #    creates: .git/hooks/pre-commit
