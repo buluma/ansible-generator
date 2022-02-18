@@ -10,7 +10,3 @@
 
     - name: Example from an Ansible Playbook
       ansible.builtin.ping:
-
-    - name: Induce an exception to see what happens
-      ansible.builtin.ping:
-        data: crash
