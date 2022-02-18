@@ -1,34 +1,19 @@
 ---
 galaxy_info:
-  author: buluma
-  description: Ansible Role Testing / Ping ansible hosts.
-  company: ShadowNet
-  role_name: testing
+  author: Michael Buluma
   namespace: buluma
-  license: MIT, Apache-2.0
-
-  min_ansible_version: 2.1
+  role_name: testing
+  description: Ping Ping Testing
+  license: Apache-2.0
+  company: none
+  min_ansible_version: "2.10"
 
   platforms:
-    - name: Alpine
-      versions:
-        - all
-    - name: EL
-      versions:
-        - 8
-    - name: Debian
-      versions:
-        - all
     - name: Fedora
       versions:
         - all
-    - name: OpenSUSE
-      versions:
-        - all
-    - name: Ubuntu
-      versions:
-        - all
 
-  galaxy_tags: []
+  galaxy_tags:
+    - server
 
 dependencies: []

@@ -3,6 +3,6 @@
 # Ansible managed
 #
 repository:
-  description: Ansible Role Testing
+  description: Ping Ping Testing
   homepage: https://buluma.github.io/
-  topics: ansible, molecule, tox, playbook, hacktoberfest
+  topics: server, ansible, molecule, tox, playbook, hacktoberfest
