@@ -6,7 +6,7 @@
 
   tasks:
 
-    - assert: { that: "ansible_os_family != 'RedHat'" }
+    # - assert: { that: "ansible_os_family != 'RedHat'" }
 
     - assert:
         that:
@@ -34,3 +34,13 @@
           - my_param <= 100
           - my_param >= 0
         quiet: true
+
+    # Test we can logon to 'webservers' and execute python with json lib.
+    # ansible webservers -m ping
+
+    - name: Example from an Ansible Playbook
+      ansible.builtin.ping:
+
+    - name: Induce an exception to see what happens
+      ansible.builtin.ping:
+        data: crash
