@@ -1,0 +1,59 @@
+---
+#
+# Ansible managed
+#
+
+name: Ansible Molecule
+
+on:
+  # Schedule updates (once daily)
+  schedule:
+    - cron: '39 20 * * *'
+  # Lines below let you run workflow manually and on each commit
+  workflow_dispatch:
+  push: {branches: ["master", "main"]}
+    tags-ignore:
+      - '*'
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2.4.0
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: buluma/molecule-action@v4.0.6
+        with:
+          command: lint
+  test:
+    needs:
+      - lint
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - image: "fedora-systemd"
+            tag: "34"
+          - image: "fedora-systemd"
+            tag: "latest"
+          - image: "fedora-systemd"
+            tag: "rawhide"
+          - image: "fedora-systemd"
+            tag: "34"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2.4.0
+        with:
+          path: "${{ github.repository }}"
+      - name: disable apparmor for mysql
+        run: sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
+      - name: parse apparmor for mysql
+        run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
+      - name: molecule
+        uses: buluma/molecule-action@v4.0.6
+        with:
+          image: ${{ matrix.config.image }}
+          tag: ${{ matrix.config.tag }}
