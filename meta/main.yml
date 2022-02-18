@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: buluma
-  description: Ansible Role Testing
+  description: Ansible Role Testing / Ping ansible hosts.
   company: ShadowNet
   role_name: testing
   namespace: buluma

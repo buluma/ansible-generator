@@ -1,2 +1,6 @@
 ---
 # tasks file for ansible-role-testing
+
+- include: ping.yml
+  tags: 
+    - ping
