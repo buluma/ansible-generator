@@ -31,10 +31,24 @@ galaxy_info:
   # https://galaxy.ansible.com/api/v1/platforms/
   #
   platforms:
+    - name: Alpine
+      versions:
+        - all
+    - name: EL
+      versions:
+        - 8
+    - name: Debian
+      versions:
+        - all
     - name: Fedora
       versions:
         - all
-        - 34
+    - name: OpenSUSE
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
   # - name: SomePlatform
   #   versions:
   #   - all
