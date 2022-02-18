@@ -19,7 +19,7 @@ jobs:
       - name: Mirror + trigger CI
         uses: SvanBoxel/gitlab-mirror-and-ci-action@master
         with:
-          args: "buluma/ansible-role-moodle"
+          args: "buluma/ansible-role-testing"
         env:
           GITLAB_HOSTNAME: "gitlab.com"
           GITLAB_USERNAME: "buluma"
