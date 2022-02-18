@@ -5,7 +5,32 @@
   gather_facts: yes
 
   tasks:
-    - name: check if my_fact is set
-      ansible.builtin.assert:
+
+    - assert: { that: "ansible_os_family != 'RedHat'" }
+
+    - assert:
         that:
-          - success_msg == "Pong"
+          - "'foo' in some_command_result.stdout"
+          - number_of_the_counting == 3
+
+    - name: After version 2.7 both 'msg' and 'fail_msg' can customize failing assertion message
+      assert:
+        that:
+          - my_param <= 100
+          - my_param >= 0
+        fail_msg: "'my_param' must be between 0 and 100"
+        success_msg: "'my_param' is between 0 and 100"
+
+    - name: Please use 'msg' when ansible version is smaller than 2.7
+      assert:
+        that:
+          - my_param <= 100
+          - my_param >= 0
+        msg: "'my_param' must be between 0 and 100"
+
+    - name: Use quiet to avoid verbose output
+      assert:
+        that:
+          - my_param <= 100
+          - my_param >= 0
+        quiet: true
