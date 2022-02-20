@@ -5,8 +5,8 @@
   gather_facts: yes
 
   tasks:
-    - name: check if my_fact is set
-      ansible.builtin.assert:
-        that:
-          - ansible_local.custom.datacenter == "Amsterdam"
-          - ansible_local.custom.availability_zone == "west"
+    # Test we can logon to 'webservers' and execute python with json lib.
+    # ansible webservers -m ping
+
+    - name: Example from an Ansible Playbook
+      ansible.builtin.ping:

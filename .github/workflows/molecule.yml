@@ -12,6 +12,8 @@ on:
   # Lines below let you run workflow manually and on each commit
   workflow_dispatch:
   push: {branches: ["master", "main"]}
+    tags-ignore:
+      - '*'
 
 jobs:
   lint:
@@ -39,8 +41,6 @@ jobs:
             tag: "latest"
           - image: "fedora-systemd"
             tag: "rawhide"
-          - image: "fedora-systemd"
-            tag: "34"
     steps:
       - name: checkout
         uses: actions/checkout@v2.4.0
