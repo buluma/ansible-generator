@@ -3,7 +3,7 @@
 
 # Settings to Docker containers.
 docker_namespace: buluma
-docker_image: fedora
+docker_image: docker-ubuntu-systemd
 docker_tag: latest
 
 # References to travis use a namespace, this is likely your username on Travis.
@@ -16,7 +16,7 @@ galaxy_namespace: buluma
 github_namespace: buluma
 
 # Your name and optionally email-address.
-author: Michael Buluma (me@buluma.co.ke)
+author: Michael Buluma (me@buluma.me.ke)
 
 # The full URL to your website.
 author_website: "https://buluma.github.io/"

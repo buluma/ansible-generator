@@ -10,9 +10,10 @@ jobs:
   build:
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v2.4.0"
+      - uses: "actions/checkout@v3"
       - name: "TODO to Issue"
-        uses: "alstr/todo-to-issue-action@v4.6"
+        uses: "buluma/todo-to-issue-action@v1.0.1"
         id: "todo"
         with:
-          TOKEN: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}
+          USER_PROJECTS: ${% raw %}buluma/Ansible/To do{% endraw %}
+          PROJECTS_SECRET: ${% raw %}{{ secrets.PROJECTS_SECRET }}{% endraw %}

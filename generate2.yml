@@ -159,6 +159,8 @@
         - source: tox.ini
         - source: settings.yml
           dest: .github/settings.yml
+        - source: slack.yml
+          dest: .github/slack.yml
         - source: LICENSE-2.0.txt
           dest: LICENSE
         - source: SECURITY.md
