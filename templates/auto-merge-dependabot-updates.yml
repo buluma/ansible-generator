@@ -1,0 +1,15 @@
+---
+{{ ansible_managed | comment }}
+
+name: Auto Merge Dependency Updates
+
+on:
+  - pull_request_target
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: buluma/gh-action-auto-merge-dependency-updates@v1
+        with:
+          allowed-actors: dependabot-preview[bot], dependabot[bot]

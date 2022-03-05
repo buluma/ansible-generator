@@ -6,6 +6,11 @@ name: "TODO 2 Issue"
 on:
   push:
 
+concurrency:
+  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
+
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: "ubuntu-20.04"
@@ -16,4 +21,5 @@ jobs:
         id: "todo"
         with:
           USER_PROJECTS: ${% raw %}buluma/Ansible/To do{% endraw %}
+
           PROJECTS_SECRET: ${% raw %}{{ secrets.PROJECTS_SECRET }}{% endraw %}

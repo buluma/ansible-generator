@@ -4,6 +4,11 @@
 on:
   - push
 
+concurrency:
+  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
+
+  cancel-in-progress: true
+
 name: Ansible Graphviz
 
 jobs:

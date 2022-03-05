@@ -3,6 +3,11 @@ name: Mirror and run GitLab CI
 
 on: [push]
 
+concurrency:
+  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
+
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,13 +22,15 @@ jobs:
         if: always()
       - uses: actions/checkout@v3
       - name: Mirror + trigger CI
-        uses: buluma/gitlab-mirror-ci-action@1.0.2
+        uses: buluma/gitlab-mirror-ci-action@1.0.6
         with:
           args: "buluma/ansible-role-{{ role_name }}"
         env:
           GITLAB_HOSTNAME: "gitlab.com"
           GITLAB_USERNAME: "{{ github_namespace }}"
+
           GITLAB_PASSWORD: {% raw %}${{ secrets.GITLAB_PASSWORD }}{% endraw %}
+
           GITLAB_PROJECT_ID: "3340722x"
           GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
 
