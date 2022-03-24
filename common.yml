@@ -156,18 +156,8 @@
       with_items:
         - source: ansible-lint
           dest: .ansible-lint
-        - source: tox.ini
-        - source: settings.yml
-          dest: .github/settings.yml
-        - source: LICENSE-2.0.txt
-          dest: LICENSE
-        - source: SECURITY.md
-        - source: travis.yml
-          dest: .travis.yml
         - source: molecule.yml
           dest: molecule/default/molecule.yml
-        - source: README.md
-        - source: CONTRIBUTING.md
         - source: molecule-action.yml
           dest: .github/workflows/molecule.yml
         - source: galaxy.yml
@@ -178,8 +168,6 @@
           dest: .github/workflows/auto-merge-dependabot-updates.yml
         - source: release_drafter.yml
           dest: .github/workflows/release_drafter.yml
-        - source: gitlab_trigger.yml
-          dest: .github/workflows/gitlab_trigger.yml
         - source: release-drafter.yml
           dest: .github/release-drafter.yml
         - source: dependabot.yml
@@ -191,8 +179,3 @@
           dest: .github/workflows/requirements2png.yml
       loop_control:
         label: "{{ item.source }}"
-
-    # - name: pre-commit install
-    #   command: pre-commit install
-    #   args:
-    #     creates: .git/hooks/pre-commit

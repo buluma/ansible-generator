@@ -20,6 +20,6 @@ jobs:
         uses: "buluma/todo-to-issue-action@v1.0.1"
         id: "todo"
         with:
-          USER_PROJECTS: ${% raw %}buluma/Ansible/To do{% endraw %}
+          USER_PROJECTS: {% raw %}buluma/Ansible/To do{% endraw %}
 
           PROJECTS_SECRET: ${% raw %}{{ secrets.PROJECTS_SECRET }}{% endraw %}

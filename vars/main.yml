@@ -3,7 +3,7 @@
 
 # Settings to Docker containers.
 docker_namespace: buluma
-docker_image: docker-ubuntu-systemd
+docker_image: fedora
 docker_tag: latest
 
 # References to travis use a namespace, this is likely your username on Travis.
@@ -27,7 +27,7 @@ platform_image_mapping:
   Archlinux: archlinux
   Debian: debian-systemd
   EL: "{{ enterprise_linux | default('enterpriselinux') }}"
-  Fedora: fedora-systemd
+  Fedora: "{{ fedora | default('fedora-systemd') }}"
   OpenSUSE: opensuse
   Ubuntu: docker-ubuntu-systemd
 
@@ -67,13 +67,10 @@ distribution_version_mapping:
     all:
       - 34
       - latest
-      - rawhide
     34:
       - 34
     35:
       - latest
-    36:
-      - rawhide
   OpenSUSE:
     all:
       - latest

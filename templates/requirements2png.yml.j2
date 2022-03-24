@@ -2,7 +2,9 @@
 {{ ansible_managed | comment }}
 
 on:
-  - push
+  workflow_dispatch:
+  push: {branches: ["master", "main", "testing"]}
+
 
 concurrency:
   group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}

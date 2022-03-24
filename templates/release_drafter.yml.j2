@@ -15,6 +15,11 @@ on:
     # Only following types are handled by the action, but one can default to all as well
     types: [opened, reopened, synchronize]
 
+concurrency:
+  group: ${% raw %}{{ github.ref }}-${{ github.workflow }}{% endraw %}
+
+  cancel-in-progress: true
+
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest

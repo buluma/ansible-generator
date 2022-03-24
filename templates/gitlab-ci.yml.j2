@@ -11,8 +11,6 @@ variables:
 molecule:
   script:
     - image=${image} tag=${tag} molecule test
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
   retry: 1
   parallel:
     matrix:
@@ -42,28 +40,11 @@ testing:
 {% endfor %}
 {% endfor %}
 
-role_testing:
-  script:
-    - image=${image} tag=${tag} ansible-galaxy install {{ github_namespace }}.{{ role_name }}
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "testing"
-  retry: 1
-  parallel:
-    matrix:
-{% for platform in meta.galaxy_info.platforms %}
-{% for version in platform.versions %}
-{% for tag in distribution_version_mapping[platform.name][version] %}
-      - image: "{{ platform_image_mapping[platform.name] }}"
-        tag: "{{ tag }}"
-{% endfor %}
-{% endfor %}
-{% endfor %}
-
 galaxy:
   script:
     - ansible-galaxy role info {{ github_namespace }}.{{ role_name }}
 
-role_testing_live:
+role_testing:
   script:
     - image=${image} tag=${tag} ansible-galaxy install {{ github_namespace }}.{{ role_name }}
   retry: 1
