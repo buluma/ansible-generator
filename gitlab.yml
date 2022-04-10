@@ -13,7 +13,7 @@
     # - vars/vault.yml
 
   tasks:
-    - name: see if all veriables are set
+    - name: see if all variables are set
       assert:
         that:
           - namespace is defined
