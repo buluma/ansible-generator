@@ -167,6 +167,8 @@
         - source: CONTRIBUTING.md
         - source: molecule-action.yml
           dest: .github/workflows/molecule.yml
+        - source: galaxy.yml
+          dest: .github/workflows/galaxy.yml
         - source: todo-action.yml
           dest: .github/workflows/todo.yml
         - source: labelassign-action.yml

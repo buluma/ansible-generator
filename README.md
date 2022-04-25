@@ -67,7 +67,7 @@ galaxy_namespace: buluma
 github_namespace: buluma
 
 # Your name and optionally email-address.
-author: Michael Buluma (me@buluma.co.ke)
+author: Michael Buluma (me@buluma.github.io)
 
 # The full URL to your website.
 author_website: "https://buluma.github.io/"

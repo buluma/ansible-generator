@@ -9,8 +9,14 @@ variables:
   PY_COLORS: 1
 
 molecule:
+  stage: build
   script:
     - image=${image} tag=${tag} molecule test
+  artifacts:
+    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
+    paths:
+      - /
+    expire_in: 1 day
   retry: 1
   parallel:
     matrix:
@@ -24,6 +30,8 @@ molecule:
 {% endfor %}
 
 testing:
+  stage: test
+  needs: []
   script:
     - image=${image} tag=${tag} molecule test
   rules:
@@ -41,10 +49,14 @@ testing:
 {% endfor %}
 
 galaxy:
+  stage: deploy
+  needs: []
   script:
     - ansible-galaxy role info {{ github_namespace }}.{{ role_name }}
 
 role_testing:
+  stage: test
+  needs: []
   script:
     - image=${image} tag=${tag} ansible-galaxy install {{ github_namespace }}.{{ role_name }}
   retry: 1
@@ -58,3 +70,16 @@ role_testing:
 {% endfor %}
 {% endfor %}
 {% endfor %}
+
+release_job:
+  stage: .post
+  needs: [molecule]
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - echo "Running the release job."
+  release:
+    tag_name: $CI_COMMIT_TAG
+    name: 'Release $CI_COMMIT_TAG'
+    description: 'Release created using the release-cli.'
