@@ -10,6 +10,7 @@ variables:
 
 molecule:
   stage: build
+  allow_failure: true
   script:
     - image=${image} tag=${tag} molecule test
   artifacts:
