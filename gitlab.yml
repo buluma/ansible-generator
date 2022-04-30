@@ -3,7 +3,7 @@
 - name: configure gitlab repository
   hosts: localhost
   become: no
-  gather_facts: no
+  gather_facts: yes
 
   vars:
     namespace: buluma
@@ -13,6 +13,15 @@
     - vars/vault.yml
 
   tasks:
+    - name: set role_path and role
+      set_fact:
+        role_path: "{{ lookup('env', 'PWD') }}"
+        role: "{{ lookup('env', 'PWD') | basename | regex_replace('ansible-role-') }}"
+
+    - name: verify role name
+    - debug:
+        msg: "{{ role }}"
+
     - name: see if all variables are set
       assert:
         that:
@@ -22,7 +31,7 @@
 
     - name: urlencode path
       set_fact:
-        encoded_path: "{{ namespace + '%2F' + role }}"
+        encoded_path: "{{ namespace + '%2Fansible-role-' + role }}"
 
     - name: place variable
       block:
