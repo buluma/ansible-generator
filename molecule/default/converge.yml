@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include buluma.git_tag"
+      include_role:
+        name: "buluma.git_tag"
