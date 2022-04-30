@@ -1,0 +1,24 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: push role to galaxy
+  hosts: localhost
+  become: no
+  gather_facts: no
+  gather_subset:
+    - min
+
+  vars_files:
+    - vars/main.yml
+    - vars/vault.yml
+
+  tasks:
+    - name: set role_path and role_name
+      set_fact:
+        role_path: "{{ lookup('env', 'PWD') }}"
+        role_name: "{{ lookup('env', 'PWD') | basename | regex_replace('ansible-role-') }}"
+
+    - name: push to galaxy
+      shell: "set -o pipefail ; ansible-galaxy role import --api-key {{ GALAXY_API_KEY }} {{ galaxy_namespace }} ansible-role-{{ role_name }}"
+      register: galaxy_push
+      changed_when: no
+      failed_when: no
