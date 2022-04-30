@@ -3,7 +3,7 @@
 
 # Settings to Docker containers.
 docker_namespace: buluma
-docker_image: docker-ubuntu2104-ansible
+docker_image: docker-ubuntu2004-ansible
 docker_tag: latest
 
 # References to travis use a namespace, this is likely your username on Travis.
