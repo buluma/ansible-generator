@@ -83,6 +83,8 @@ distribution_version_mapping:
     34:
       - 34
     35:
+      - 35
+    36:
       - latest
   OpenSUSE:
     all:
