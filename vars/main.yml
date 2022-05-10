@@ -3,7 +3,7 @@
 
 # Settings to Docker containers.
 docker_namespace: buluma
-docker_image: docker-ubuntu2004-ansible
+docker_image: docker-centos7-ansible
 docker_tag: latest
 
 # References to travis use a namespace, this is likely your username on Travis.
@@ -27,8 +27,10 @@ platform_image_mapping:
   Archlinux: archlinux
   Debian: debian-systemd
   EL: "{{ enterprise_linux | default('enterpriselinux') }}"
+  CentOS: centos-systemd
   Fedora: "{{ fedora | default('fedora-systemd') }}"
   OpenSUSE: "{{ opensuse | default('docker-opensuse-systemd') }}"
+  OracleLinux: oraclelinux
   Ubuntu: docker-ubuntu-systemd
 
 # This maps the Galaxy distribution and version to Docker images.
@@ -47,6 +49,17 @@ distribution_version_mapping:
   Archlinux:
     all:
       - latest
+  CentOS:
+    all:
+      - 7
+      - latest
+      - systemd
+    7:
+      - 7
+    latest:
+      - latest
+    systemd:
+      - systemd
   Debian:
     all:
       - latest
@@ -74,6 +87,14 @@ distribution_version_mapping:
   OpenSUSE:
     all:
       - latest
+  OracleLinux:
+    all:
+      - 7
+      - 8
+    7:
+      - 7
+    8:
+      - 8
   Ubuntu:
     all:
       - latest
