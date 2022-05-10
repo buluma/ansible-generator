@@ -100,6 +100,8 @@ distribution_version_mapping:
       - latest
       - bionic
       - focal
+    jammy:
+      - latest
     focal:
       - focal
     bionic:
