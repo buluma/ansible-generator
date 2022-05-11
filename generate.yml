@@ -186,7 +186,7 @@
       loop_control:
         label: "{{ item.source }}"
 
-    # - name: pre-commit install
-    #   command: pre-commit install
-    #   args:
-    #     creates: .git/hooks/pre-commit
+    - name: pre-commit install
+      command: pre-commit install
+      args:
+        creates: .git/hooks/pre-commit
