@@ -163,7 +163,7 @@
           dest: LICENSE
         - source: molecule.yml
           dest: molecule/default/molecule.yml
-        - source: README.md
+        # - source: README.md
         - source: CONTRIBUTING.md
         - source: molecule-action.yml
           dest: .github/workflows/molecule.yml
