@@ -18,9 +18,9 @@
         role_path: "{{ lookup('env', 'PWD') }}"
         role: "{{ lookup('env', 'PWD') | basename | regex_replace('ansible-role-') }}"
 
-    - name: verify role name
-      debug:
-        msg: "{{ role }}"
+    # - name: verify role name
+    # - debug:
+    #     msg: "{{ role }}"
 
     - name: see if all variables are set
       assert:
@@ -65,19 +65,6 @@
               protects: true
               masked: true
 
-    - name: list branches
-      uri:
-        url: "https://gitlab.com/api/v4/projects/{{ encoded_path }}/repository/branches"
-        method: GET
-        headers:
-          PRIVATE-TOKEN: "{{ gitlab_private_token }}"
-      register: gitlab_branches
-
-    - name: debug branches
-      debug:
-        msg: "{{ gitlab_branches.json | list }}"
-      register: gitlab_pipeline_branch
-
     - name: list pipelines
       uri:
         url: "https://gitlab.com/api/v4/projects/{{ encoded_path }}/pipeline_schedules"
@@ -85,11 +72,6 @@
         headers:
           PRIVATE-TOKEN: "{{ gitlab_private_token }}"
       register: gitlab_schedules
-
-    - name: debug pipelines
-      debug:
-        msg: "{{ gitlab_schedules.json | list }}"
-      register: gitlab_pipeline_output_schedule
 
     - name: delete all pipelines
       uri:
@@ -115,5 +97,5 @@
         body:
           description: "Daily test"
           ref: master
-          cron: "{{ letter_minute_mapping[role[1]] | default('0') }} */4 * * *"
+          cron: "{{ letter_minute_mapping[role[1]] | default('0') }} */8 * * *"
           cron_timezone: Africa/Nairobi
