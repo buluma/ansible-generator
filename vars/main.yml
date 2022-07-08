@@ -29,7 +29,7 @@ platform_image_mapping:
   EL: "{{ enterprise_linux | default('enterpriselinux') }}"
   CentOS: centos-systemd
   Fedora: "{{ fedora | default('fedora-systemd') }}"
-  OpenSUSE: "{{ opensuse | default('docker-opensuse-systemd') }}"
+  opensuse: "{{ opensuse | default('docker-opensuse-systemd') }}"
   OracleLinux: oraclelinux
   Ubuntu: docker-ubuntu-systemd
   FreeBSD: freebsd
@@ -43,7 +43,7 @@ distribution_version_mapping:
     all:
       - 1
       - latest
-    2018.03:
+    "2018.03":
       - 1
     Candidate:
       - latest
@@ -55,7 +55,7 @@ distribution_version_mapping:
       - 7
       - latest
       - systemd
-    7:
+    "7":
       - 7
     latest:
       - latest
@@ -73,22 +73,22 @@ distribution_version_mapping:
     all:
       - 7
       - latest
-    7:
+    "7":
       - 7
-    8:
+    "8":
       - latest
   Fedora:
     all:
       - 34
       - 35
       - latest
-    34:
+    "34":
       - 34
-    35:
+    "35":
       - 35
-    36:
+    "36":
       - latest
-  OpenSUSE:
+  opensuse:
     all:
       - latest
   OracleLinux:
