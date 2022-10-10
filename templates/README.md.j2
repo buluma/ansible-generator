@@ -86,17 +86,6 @@ Some roles can't run on a specific distribution or version. Here are some except
 {% for exception in exceptions %}| {{ exception.variation }} | {{ exception.reason }} |
 {% endfor %}{% endif %}
 
-{% if versions is defined %}
-## [Included version(s)](#included-versions)
-
-This role [refers to a version]({{ reference }}) released by {{ project_name }}. Check the released version(s) here:
-{% for version in versions %}
-- [{{ version.name }}]({{ version.url }}).
-{% endfor %}
-
-This version reference means a role may get outdated. Monthly tests occur to see if [bit-rot](https://en.wikipedia.org/wiki/Software_rot) occured. If you however find a problem, please create an issue, I'll get on it as soon as possible.
-{% endif %}
-
 If you find issues, please register them in [GitHub](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/issues)
 
 ## [Changelog](#changelog)

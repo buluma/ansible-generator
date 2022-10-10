@@ -64,30 +64,33 @@ distribution_version_mapping:
   Debian:
     all:
       - latest
-      - bookworm
+      - buster
     bullseye:
       - latest
-    bookworm:
-      - bookworm
+    buster:
+      - buster
   EL:
     all:
       - 7
+      - 8
       - latest
     "7":
       - 7
     "8":
+      - 8
+    "9":
       - latest
   Fedora:
     all:
-      - 34
       - 35
       - latest
-    "34":
-      - 34
+      - rawhide
     "35":
       - 35
     "36":
       - latest
+    "37":
+      - rawhide
   opensuse:
     all:
       - latest
