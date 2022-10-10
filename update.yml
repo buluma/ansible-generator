@@ -181,6 +181,8 @@
           dest: .github/release-drafter.yml
         - source: dependabot.yml
           dest: .github/dependabot.yml
+        - source: pre-commit-config.yaml
+          dest: .pre-commit-config.yaml
         - source: gitlab-ci.yml
           dest: .gitlab-ci.yml
         - source: requirements.txt
@@ -191,3 +193,15 @@
       command: pre-commit install
       args:
         creates: .git/hooks/pre-commit
+
+    - name: pre-commit run --all-files
+      command: pre-commit run --all-files
+      register: pre_commit_results
+
+    - name: Print return information from the previous task
+      ansible.builtin.debug:
+        var: pre_commit_results.stdout_lines
+        verbosity: 2
+
+    - name: debug pre_commit_results
+      debug: var=pre_commit_results.stdout_lines
