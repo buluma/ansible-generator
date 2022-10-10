@@ -7,7 +7,7 @@ docker_image: docker-centos7-ansible
 docker_tag: latest
 
 # References to travis use a namespace, this is likely your username on Travis.
-travis_namespace: buluma
+# travis_namespace: buluma
 
 # Documentation refers to Ansible Galaxy. this is likely your username on Galaxy.
 galaxy_namespace: buluma
