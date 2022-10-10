@@ -10,4 +10,3 @@ if [ -f requirements.yml ] ; then
     echo "  - name: community.general" >> requirements.yml
   fi
 fi
-
