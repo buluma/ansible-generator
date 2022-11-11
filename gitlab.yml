@@ -3,25 +3,17 @@
 - name: configure gitlab repository
   hosts: localhost
   become: no
-  gather_facts: yes
+  gather_facts: no
 
   vars:
     namespace: buluma
 
   vars_files:
+    - defaults/main.yml
     - vars/main.yml
     - vars/vault.yml
 
   tasks:
-    - name: set role_path and role
-      set_fact:
-        role_path: "{{ lookup('env', 'PWD') }}"
-        role: "{{ lookup('env', 'PWD') | basename | regex_replace('ansible-role-') }}"
-
-    # - name: verify role name
-    # - debug:
-    #     msg: "{{ role }}"
-
     - name: see if all variables are set
       assert:
         that:
@@ -31,11 +23,11 @@
 
     - name: urlencode path
       set_fact:
-        encoded_path: "{{ namespace + '%2Fansible-role-' + role }}"
+        encoded_path: "{{ namespace + '%2F' + role }}"
 
     - name: place variable
       block:
-        - name: check if the variable is set already
+        - name: see if the variable is set already
           uri:
             url: "https://gitlab.com/api/v4/projects/{{ encoded_path }}/variables"
             method: GET
@@ -47,7 +39,6 @@
           register: check_variable
           failed_when:
             check_variable.json | length <= 0
-          ignore_errors: yes
       rescue:
         - name: place variable
           uri:
@@ -65,7 +56,7 @@
               protects: true
               masked: true
 
-    - name: list pipelines
+    - name: list pipeline schedules
       uri:
         url: "https://gitlab.com/api/v4/projects/{{ encoded_path }}/pipeline_schedules"
         method: GET
@@ -73,7 +64,7 @@
           PRIVATE-TOKEN: "{{ gitlab_private_token }}"
       register: gitlab_schedules
 
-    - name: delete all pipelines
+    - name: delete all pipeline schedules
       uri:
         url: "https://gitlab.com/api/v4/projects/{{ encoded_path }}/pipeline_schedules/{{ item.id }}"
         method: DELETE
@@ -95,7 +86,43 @@
         headers:
           PRIVATE-TOKEN: "{{ gitlab_private_token }}"
         body:
-          description: "Daily test"
+          description: "Monthly test"
           ref: master
-          cron: "{{ letter_minute_mapping[role[1]] | default('0') }} */8 * * *"
+          cron: "{{ letter_minute_mapping[role[15]] | default('13') }} {{ letter_hour_mapping[role[13]] }} {{ letter_day_mapping[role[13]] }} * *"
           cron_timezone: Africa/Nairobi
+
+#     - name: disable runnner
+#       uri:
+#         url: "https://gitlab.com/api/v4/projects/{{ encoded_path }}/runners/{{ gitlab_runner_id }}"
+#         method: DELETE
+#         body_format: json
+#         status_code:
+#           - 204
+#           - 404
+#         headers:
+#           PRIVATE-TOKEN: "{{ gitlab_private_token }}"
+#         body:
+#           runner_id: "{{ gitlab_runner_id }}"
+
+    - name: enable runnner
+      uri:
+        url: "https://gitlab.com/api/v4/projects/{{ encoded_path }}/runners"
+        method: POST
+        body_format: json
+        status_code:
+          - 201
+          - 400
+        headers:
+          PRIVATE-TOKEN: "{{ gitlab_private_token }}"
+        body:
+          runner_id: "{{ gitlab_runner_id }}"
+
+    - name: disable shared runnners
+      uri:
+        url: "https://gitlab.com/api/v4/projects/{{ encoded_path }}"
+        method: PUT
+        body_format: json
+        headers:
+          PRIVATE-TOKEN: "{{ gitlab_private_token }}"
+        body:
+          shared_runners_enabled: false
