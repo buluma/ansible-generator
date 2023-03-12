@@ -2,44 +2,48 @@
 
 {{ meta.galaxy_info.description }}
 
-|GitHub|GitLab|Quality|Downloads|Version|Issues|Pull Requests|
-|------|------|-------|---------|-------|------|-------------|
-|[![github](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/workflows/Ansible%20Molecule/badge.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/actions)|[![gitlab](https://gitlab.com/{{ github_namespace }}/ansible-role-{{ role_name }}/badges/master/pipeline.svg)](https://gitlab.com/{{ github_namespace }}/ansible-role-{{ role_name }})|[![quality](https://img.shields.io/ansible/quality/{{ galaxy_id.stdout | default('unset') }})](https://galaxy.ansible.com/{{ github_namespace }}/{{ role_name }})|[![downloads](https://img.shields.io/ansible/role/d/{{ galaxy_id.stdout |default('unset') }})](https://galaxy.ansible.com/{{ github_namespace }}/{{ role_name }})|[![Version](https://img.shields.io/github/release/{{ github_namespace }}/ansible-role-{{ role_name }}.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/releases/)|[![Issues](https://img.shields.io/github/issues/{{ github_namespace }}/ansible-role-{{ role_name }}.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/issues/)|[![PullRequests](https://img.shields.io/github/issues-pr-closed-raw/{{ github_namespace }}/ansible-role-{{ role_name }}.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/pulls/)|
+|GitHub|GitLab|Quality|Downloads|Version|
+|------|------|-------|---------|-------|
+|[![github](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/workflows/Ansible%20Molecule/badge.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/actions)|[![gitlab](https://gitlab.com/{{ gitlab_namespace }}/ansible-role-{{ role_name }}/badges/master/pipeline.svg)](https://gitlab.com/{{ gitlab_namespace }}/ansible-role-{{ role_name }})|[![quality](https://img.shields.io/ansible/quality/{{ galaxy_id.stdout | default('unset') }})](https://galaxy.ansible.com/{{ github_namespace }}/{{ role_name }})|[![downloads](https://img.shields.io/ansible/role/d/{{ galaxy_id.stdout |default('unset') }})](https://galaxy.ansible.com/{{ github_namespace }}/{{ role_name }})|[![Version](https://img.shields.io/github/release/{{ github_namespace }}/ansible-role-{{ role_name }}.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/releases/)|
 
 ## [Example Playbook](#example-playbook)
 
-This example is taken from `molecule/default/converge.yml` and is tested on each push, pull request and release.
+This example is taken from [`molecule/default/converge.yml`](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/blob/master/molecule/default/converge.yml) and is tested on each push, pull request and release.
+
 ```yaml
 {{ example.content | b64decode | regex_replace('ansible-role-', galaxy_namespace ~ '.') }}```
 
 {% if prepare.content is defined %}
-The machine needs to be prepared. In CI this is done using `molecule/default/prepare.yml`:
+The machine needs to be prepared. In CI this is done using [`molecule/default/prepare.yml`](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/blob/master/molecule/default/prepare.yml):
+
 ```yaml
 {{ prepare.content | b64decode | regex_replace('ansible-role-', galaxy_namespace ~ '.') }}```
 
 {% endif %}
+Also see a [full explanation and example](https://buluma.github.io/how-to-use-these-roles.html) on how to use these roles.
 
 {% if variables.content is defined %}
 ## [Role Variables](#role-variables)
 
-The default values for the variables are set in `defaults/main.yml`:
+The default values for the variables are set in [`defaults/main.yml`](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/blob/master/defaults/main.yml):
+
 ```yaml
 {{ variables.content | b64decode }}```
 {% endif %}
 
 ## [Requirements](#requirements)
 
-- pip packages listed in [requirements.txt](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/blob/main/requirements.txt).
+- pip packages listed in [requirements.txt](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/blob/master/requirements.txt).
 
 {% if requirements is defined and requirements.roles is defined %}
-## [Status of used roles](#status-of-requirements)
+## [State of used roles](#state-of-used-roles)
 
 The following roles are used to prepare a system. You can prepare your system in another way.
 
 | Requirement | GitHub | GitLab |
 |-------------|--------|--------|
 {% for requirement in requirements.roles %}
-|[{{ requirement.name }}](https://galaxy.ansible.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.') }})|[![Build Status GitHub](https://github.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.', 'ansible-role-') }}/workflows/Ansible%20Molecule/badge.svg)](https://github.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.', 'ansible-role-') }}/actions)|[![Build Status GitLab ](https://gitlab.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.', 'ansible-role-') }}/badges/master/pipeline.svg)](https://gitlab.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.', 'ansible-role-') }})|
+|[{{ requirement.name }}](https://galaxy.ansible.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.') }})|[![Build Status GitHub](https://github.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.', 'ansible-role-') }}/workflows/Ansible%20Molecule/badge.svg)](https://github.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.', 'ansible-role-') }}/actions)|[![Build Status GitLab](https://gitlab.com/{{ gitlab_namespace }}/{{ requirement.name | regex_replace(galaxy_namespace + '\.', 'ansible-role-') }}/badges/master/pipeline.svg)](https://gitlab.com/{{ gitlab_namespace }}/{{ requirement.name | regex_replace(galaxy_namespace + '\.', 'ansible-role-') }})|
 {% endfor %}
 {% endif %}
 
@@ -51,23 +55,23 @@ Most roles require some kind of preparation, this is done in `molecule/default/p
 {% for dependency in meta.dependencies %}
 - {{ dependency }}
 {% endfor %}
+
 {% endif %}
 ## [Context](#context)
 
-This role is a part of many compatible roles. Have a look at [the documentation of these roles](https://buluma.github.io/) for further information.
+This role is a part of many compatible roles. Have a look at [the documentation of these roles]({{ author_website }}) for further information.
 
 Here is an overview of related roles:
-
 ![dependencies](https://raw.githubusercontent.com/{{ github_namespace }}/ansible-role-{{ role_name }}/png/requirements.png "Dependencies")
 
 ## [Compatibility](#compatibility)
 
-This role has been tested on these [container images](https://hub.docker.com/u/buluma):
+This role has been tested on these [container images](https://hub.docker.com/u/{{ docker_namespace }}):
 
 |container|tags|
 |---------|----|
 {% for platform in meta.galaxy_info.platforms %}
-|{{ platform.name | lower }}|{% for version in platform.versions %}{{ version }}{% if not loop.last %}, {% endif %}{% endfor %}|
+|[{{ platform.name }}]({{ image_docker_hub_url_mapping[platform.name | lower] }})|{% for version in platform.versions %}{{ version }}{% if not loop.last %}, {% endif %}{% endfor %}|
 {% endfor %}
 
 The minimum version of Ansible required is {{ meta.galaxy_info.min_ansible_version }}, tests have been done to:
@@ -76,26 +80,14 @@ The minimum version of Ansible required is {{ meta.galaxy_info.min_ansible_versi
 - The current version.
 - The development version.
 
-{% if exceptions is defined %}
-## [Exceptions](#exceptions)
-
-Some roles can't run on a specific distribution or version. Here are some exceptions.
-
-| variation                 | reason                 |
-|---------------------------|------------------------|
-{% for exception in exceptions %}| {{ exception.variation }} | {{ exception.reason }} |
-{% endfor %}{% endif %}
-
 If you find issues, please register them in [GitHub](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/issues)
-
-## [Changelog](#changelog)
-
-[Role History](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/blob/master/CHANGELOG.md)
 
 ## [License](#license)
 
-{{ meta.galaxy_info.license }}
+[{{ meta.galaxy_info.license }}](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/blob/master/LICENSE).
 
 ## [Author Information](#author-information)
 
 [{{ meta.galaxy_info.author }}]({{ author_website }})
+
+Please consider [sponsoring me](https://github.com/sponsors/{{ github_namespace }}).

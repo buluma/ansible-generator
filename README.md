@@ -1,45 +1,34 @@
 # ansible-generator
 
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-
 Generate documentation and continuous integration files for an Ansible Role.
 
-## Input
+The intention is to focus on writing or maintaining the Ansible role, and use this tool to generate chore-like-tasks.
 
-This script loads input from:
+## Overview
 
-- meta/main.yml*
-- meta/version.yml
-- meta/exception.yml
-- meta/preferences.yml
-- defaults/main.yml
-- requirements.yml
-- molecule/default/prepare.yml
-- molecule/default/converge.yml*
-- molecule/default/verify.yml
-- generate_modules.sh
-- secure.yml
-- Ansible Galaxy
-
-(Items with a star are mandatory)
-
-## Output
-
-This script writes output to:
-
-- README.md
-- molecule/default/molecule.yml
-- CONTRIBUTING.md
-- SECURITY.md
-- LICENSE
-- .travis.yml
-- tox.ini
-- .ansible-lint*
-- .github/workflows/ansible.yml
-- .github/workflows/galaxy.yml
-- .github/workflows/release_drafter.yml
-- .github/dependabot.yml
-- .github/release-drafter.yml
+```text
++--- role ----------------------+                     +--- role -------------------------------+
+| meta/main.yml                 |                     | README.md                              |
+| molecule/default/converge.yml |                     | bug_report.md                          |
+| meta/preferences.yml          |                     | feature_requests.md                    |
+| requirements.yml              |                     | FUNDING.md                             |
+| molecule/default/prepare.yml  |                     | .gitignore                             |
+| molecule/default/verify.yml   |                     | .pre-commit.config.yaml                |
+| defaults/main.yml             |                     | .yamllint                              |
++------------------------+------+                     | .ansible-lint                          |
+                         |                            | CONTRIBUTING.md                        |
++--- this tool -----+    |                            | .github/workflows/galaxy.yml           |
+| defaults/main.yml | ---+                            | .gitlab-ci.yml                         |
+| vars/main.yml     |    |                            | LICENSE                                |
+| files/*           |    |                            | .github/workflows/molecule.yml         |
+| templates/*       |    |                            | molecule/default/molecule.yml          |
++-------------------+    |    +--- this tool ---+     | .github/workflows/requirements2png.yml |
+                         +--> | generate.yml    | --> | SECURITY.md                            |
++--- Galaxy ---+         |    +-----------------+     | settings.yml                           |
+| galaxy_id    | --------+                            | .github/workflows/todo.yml             |
++--------------+                                      | .tox.ini                               |
+                                                      +----------------------------------------+
+```
 
 ## Usage
 
@@ -50,68 +39,54 @@ cd ansible-role-my_role
 
 ## Configuration
 
-In `vars/main.yml` you can change these variable to customize the output.
+In `defaults/main.yml` you can change these variable to customize the output.
 
-```yaml
----
-# Settings to Docker containers.
-docker_namespace: buluma
-docker_image: fedora
-docker_tag: latest
+### Settings to Docker containers
 
-# References to travis use a namespace, this is likely your username on Travis.
-travis_namespace: buluma
+- `docker_namespace`
+- `docker_image`
+- `docker_tag`
 
-# Documentation refers to Ansible Galaxy. this is likely your username on Galaxy.
-galaxy_namespace: buluma
+### Your username on Galaxy
 
-# Your username/organization name on GitHub.
-github_namespace: buluma
+- `galaxy_namespace`
 
-# Your name and optionally email-address.
-author: Michael Buluma (me@buluma.github.io)
+### Your username/organization name on GitHub
 
-# The full URL to your website.
-author_website: "https://buluma.github.io/"
-```
+- `github_namespace`
 
-## meta/version.yml
+### Your username/group on GitLab
 
-This optional file can be placed when a role contains a version.
+- `gitlab_namespace`
 
-```yaml
----
-project_name: Ansible
-reference: "defaults/main.yml"
-versions:
-  - name: ansible
-    url: "https://github.com/ansible/ansible/releases"
-```
+### Your name and optionally email-address
 
-## meta/exception.yml
+- `author`
 
-This optional file describes why some build are excepted.
+### The full URL to your website
 
-```yaml
----
-exceptions:
-  - variation: alpine
-    reason: "Not idempotent"
-```
+- `author_website`
 
 ## meta/preferences.yml
 
-This optional file describes how Travis, Tox and Molecule should behave.
+This (optional) file describes how Tox and Molecule should behave.
 
-|parameter       |type           |default|description|
-|----------------|---------------|-------|-----------|
-|tox_version     |list of strings|not set|What versions should Tox test? (Default: all.)|
-|enterprise_linux|string         |not set|If `EL` is used in `meta/main.yml` where should tests happen on? (Default: `rockylinux`.)
+|parameter               |type           |default|description                                                                                                                                              |
+|------------------------|---------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+|tox_ansible_versions    |list of strings|[[5,6,7]](https://github.com/buluma/ansible-generator/blob/master/templates/tox.ini.j2#L7)|What versions should Tox test? (Default: all.)                                                                                                           |
+|github_variables_mapping|list           |not set|A list of `name` and `variable`, `name` refers to the GitHub exposed name, `variable` refers to the name you'd like to pass to molecule, tox and Ansible.|
 
+## Example
 
 ```yaml
 ---
-tox_versions:
-  - current
-enterprise_linx: centos
+tox_ansible_versions:
+  - 6
+  - 7
+
+github_variables_mapping:
+  - name: secrets.VAULT_LICENSE
+    variable: VAULT_LICENCE
+  - name: secrets.MY_VAR
+    variable: someTHING
 ```

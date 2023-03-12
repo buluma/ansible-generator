@@ -4,23 +4,12 @@
 name: Ansible Molecule
 
 on:
-  # Schedule updates (once weekly)
-  schedule:
-    - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} * * {{ letter_day_mapping[role_name[0]] }}'
-  workflow_dispatch:
   push:
-    branches:
-      - master
-      - main
-      - testing
-    paths-ignore:
-      - '**/README.md'
-      - '**/CHANGELOG.md'
-
-concurrency:
-  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
-
-  cancel-in-progress: true
+    tags_ignore:
+      - '*'
+  pull_request:
+  schedule:
+    - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} {{ letter_day_mapping[role_name[0]] }} * *'
 
 jobs:
   lint:
@@ -28,13 +17,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-        with:
-          path: {% raw %}"${{ github.repository }}"{% endraw %}
-
-      - name: molecule
-        uses: buluma/molecule-action@v5.0.1
-        with:
-          command: lint
+      - name: ansible-lint
+        uses: ansible-community/ansible-lint-action@main
   test:
     needs:
       - lint
@@ -62,8 +46,15 @@ jobs:
       - name: parse apparmor for mysql
         run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
       - name: molecule
-        uses: buluma/molecule-action@v5.0.1
+        uses: buluma/molecule-action@v5.0.4
         with:
           image: {% raw %}${{ matrix.config.image }}{% endraw %}
 
           tag: {% raw %}${{ matrix.config.tag }}{% endraw %}
+
+{% if github_variables_mapping is defined %}
+        env:
+{% for item in github_variables_mapping %}
+          {{ item.variable }}: {% raw %}${{ {%endraw %}{{ item.name }} {% raw %}}}{% endraw %}
+{% endfor %}
+{% endif %}

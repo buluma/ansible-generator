@@ -1,0 +1,21 @@
+---
+
+# Settings to Docker containers.
+docker_namespace: buluma
+docker_image: fedora
+docker_tag: latest
+
+# Your username on Galaxy.
+galaxy_namespace: buluma
+
+# Your username/organization name on GitHub.
+github_namespace: buluma
+
+# Your username/group on GitLab.
+gitlab_namespace: shadowwalker
+
+# Your name and optionally email-address.
+author: Shadow Walker (bulumaknight@gmail.com)
+
+# The full URL to your website.
+author_website: "https://buluma.github.io/"

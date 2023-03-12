@@ -2,14 +2,7 @@
 {{ ansible_managed | comment }}
 
 on:
-  workflow_dispatch:
-  push: {branches: ["master", "main"]}
-
-
-concurrency:
-  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
-
-  cancel-in-progress: true
+  - push
 
 name: Ansible Graphviz
 

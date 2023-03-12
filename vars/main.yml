@@ -1,40 +1,30 @@
 ---
 # Setting to generate files.
 
-# Settings to Docker containers.
-docker_namespace: buluma
-docker_image: docker-centos7-ansible
-docker_tag: latest
-
-# References to travis use a namespace, this is likely your username on Travis.
-# travis_namespace: buluma
-
-# Documentation refers to Ansible Galaxy. this is likely your username on Galaxy.
-galaxy_namespace: buluma
-
-# Your username/organization name on GitHub.
-github_namespace: buluma
-
-# Your name and optionally email-address.
-author: Michael Buluma (me@buluma.me.ke)
-
-# The full URL to your website.
-author_website: "https://buluma.github.io/"
-
+# A map that relates the `meta/main.yml` - `galaxy_info.platforms.name` to a name of a container.
 platform_image_mapping:
-  Alpine: alpine-openrc
+  Alpine: alpine
   Amazon: amazonlinux
   Archlinux: archlinux
-  Debian: debian-systemd
-  EL: "{{ enterprise_linux | default('enterpriselinux') }}"
-  CentOS: centos-systemd
-  Fedora: "{{ fedora | default('fedora-systemd') }}"
-  opensuse: "{{ opensuse | default('docker-opensuse-systemd') }}"
-  OracleLinux: oraclelinux
-  Ubuntu: docker-ubuntu-systemd
-  FreeBSD: freebsd
+  Debian: debian
+  EL: enterpriselinux
+  Fedora: fedora
+  opensuse: opensuse
+  Ubuntu: ubuntu
+
+# A map that relates a container name to the URL of that container on Docker Hub.
+image_docker_hub_url_mapping:
+  alpine: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/alpine/general"
+  amazon: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/amazonlinux/general"
+  archlinux: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/archlinux/general"
+  debian: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/debian/general"
+  el: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/enterpriselinux/general"
+  fedora: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/fedora/general"
+  opensuse: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/opensuse/general"
+  ubuntu: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/ubuntu/general"
 
 # This maps the Galaxy distribution and version to Docker images.
+# A map that relates the `meta/main.yml` - `galaxy_info.platforms.versions` to the tag of the Docker container.
 distribution_version_mapping:
   Alpine:
     all:
@@ -50,25 +40,14 @@ distribution_version_mapping:
   Archlinux:
     all:
       - latest
-  CentOS:
-    all:
-      - 7
-      - latest
-      - systemd
-    "7":
-      - 7
-    latest:
-      - latest
-    systemd:
-      - systemd
   Debian:
     all:
       - latest
-      - buster
+      - bookworm
     bullseye:
       - latest
-    buster:
-      - buster
+    bookworm:
+      - bookworm
   EL:
     all:
       - 7
@@ -82,35 +61,23 @@ distribution_version_mapping:
       - latest
   Fedora:
     all:
-      - 35
+      - 36
       - latest
       - rawhide
-    "35":
-      - 35
     "36":
-      - latest
+      - 36
     "37":
+      - latest
+    "38":
       - rawhide
   opensuse:
-    all:
-      - latest
-  OracleLinux:
-    all:
-      - 7
-      - 8
-    7:
-      - 7
-    8:
-      - 8
-  FreeBSD:
     all:
       - latest
   Ubuntu:
     all:
       - latest
-      - bionic
       - focal
-      - jammy
+      - bionic
     jammy:
       - latest
     focal:
@@ -118,6 +85,7 @@ distribution_version_mapping:
     bionic:
       - bionic
 
+# To schedule CI on different days of the month, this is a map that relates a letter to a day of the month.
 letter_day_mapping:
   a: 1
   b: 2
@@ -156,6 +124,7 @@ letter_day_mapping:
   8: 27
   9: 27
 
+# To schedule CI on different hours of the day, this is a map that relates a letter to an hour of the day.
 letter_hour_mapping:
   a: 1
   b: 2
@@ -194,6 +163,7 @@ letter_hour_mapping:
   8: 23
   9: 23
 
+# To schedule CI on different days of the month, this is a map that relates a letter to a minute of the hour.
 letter_minute_mapping:
   a: 1
   b: 3

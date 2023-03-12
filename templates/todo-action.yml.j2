@@ -6,20 +6,13 @@ name: "TODO 2 Issue"
 on:
   push:
 
-concurrency:
-  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
-
-  cancel-in-progress: true
-
 jobs:
   build:
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@master"
       - name: "TODO to Issue"
-        uses: "buluma/todo-to-issue-action@v1.0.1"
+        uses: "alstr/todo-to-issue-action@v2.3"
         id: "todo"
         with:
-          USER_PROJECTS: {% raw %}buluma/Ansible/To do{% endraw %}
-
-          PROJECTS_SECRET: ${% raw %}{{ secrets.PROJECTS_SECRET }}{% endraw %}
+          TOKEN: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}
