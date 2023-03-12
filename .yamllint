@@ -13,5 +13,7 @@ rules:
   document-start: disable
 
 ignore: |
+  vars/vault.yml
+  tests/*
   .tox/
   .cache/
