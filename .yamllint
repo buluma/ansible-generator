@@ -10,10 +10,7 @@ rules:
     level: error
   line-length: disable
   truthy: disable
-  document-start: disable
 
 ignore: |
   vars/vault.yml
   tests/*
-  .tox/
-  .cache/
