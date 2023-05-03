@@ -1,0 +1,22 @@
+---
+{{ ansible_managed | comment }}
+
+name: "Dependabot Merge"
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: "ubuntu-20.04"
+    steps:
+      - uses: "actions/checkout@master"
+      - name: "Merge Dependabot PR"
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}
