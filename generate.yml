@@ -60,17 +60,17 @@
       when:
         - check_requirements.stat.exists | bool
 
-    - name: Check dependabot_merge.yml
-      ansible.builtin.stat:
-        path: "{{ role_path }}/dependabot_merge.yml"
-      register: check_dependabot_merge
-
-    - name: Load dependabot_merge.yml
-      ansible.builtin.include_vars:
-        file: "{{ role_path }}/dependabot_merge.yml"
-        name: dependabot_merge
-      when:
-        - check_dependabot_merge.stat.exists | bool
+    # - name: Check dependabot_merge.yml
+    #   ansible.builtin.stat:
+    #     path: "{{ role_path }}/dependabot_merge.yml"
+    #   register: check_dependabot_merge
+    #
+    # - name: Load dependabot_merge.yml
+    #   ansible.builtin.include_vars:
+    #     file: "{{ role_path }}/dependabot_merge.yml"
+    #     name: dependabot_merge
+    #   when:
+    #     - check_dependabot_merge.stat.exists | bool
 
     - name: Load molecule/default/converge.yml
       ansible.builtin.slurp:
@@ -166,8 +166,8 @@
         - source: requirements.txt
         - source: requirements2png.yml
           dest: .github/workflows/requirements2png.yml
-        - source: dependabot_merge.yml
-          dest: .github/workflows/dependabot_merge.yml
+        # - source: dependabot_merge.yml
+        #   dest: .github/workflows/dependabot_merge.yml
         - source: FUNDING.yml
           dest: .github/FUNDING.yml
       loop_control:
