@@ -3,14 +3,14 @@
 
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.name` to a name of a container.
 platform_image_mapping:
-  Alpine: alpine
+  Alpine: "{{ alpine | default('alpine-openrc') }}" # TODO: Refactor alpine Base
   Amazon: amazonlinux
   Archlinux: archlinux
-  Debian: debian
-  EL: enterpriselinux
-  Fedora: fedora
-  opensuse: opensuse
-  Ubuntu: ubuntu
+  Debian: "{{ debian | default('debian-systemd') }}" # TODO: Refactor debian base
+  EL: "{{ enterprise_linux | default('enterpriselinux') }}"
+  Fedora: "{{ fedora | default('fedora-systemd') }}"
+  opensuse: "{{ opensuse | default('docker-opensuse-systemd') }}"
+  Ubuntu: "{{ ubuntu | default('docker-ubuntu-systemd') }}"
 
 # A map that relates a container name to the URL of that container on Docker Hub.
 image_docker_hub_url_mapping:
@@ -62,13 +62,16 @@ distribution_version_mapping:
   Fedora:
     all:
       - 36
+      - 37
       - latest
-      - rawhide
+      # - rawhide
     "36":
       - 36
     "37":
-      - latest
+      - 37
     "38":
+      - latest
+    "39":
       - rawhide
   opensuse:
     all:

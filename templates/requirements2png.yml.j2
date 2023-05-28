@@ -9,6 +9,8 @@ name: Ansible Graphviz
 jobs:
   build:
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -16,7 +18,7 @@ jobs:
           path: {% raw %}${{ github.repository }}{% endraw %}
 
       - name: create png
-        uses: buluma/graphviz-action@1.0.0
+        uses: buluma/graphviz-action@1.0.0 # TODO: Update action
       - name: Commit files
         run: |
           cd {% raw %}${{ github.repository }}{% endraw %}
@@ -26,10 +28,8 @@ jobs:
           git add requirements.dot requirements.png
           git commit -m "Add generated files"
       - name: save to png branch
-        uses: ad-m/github-push-action@v0.6.0
+        uses: ad-m/github-push-action@master
         with:
-          github_token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
-
           directory: {% raw %}${{ github.repository }}{% endraw %}
 
           force: true
