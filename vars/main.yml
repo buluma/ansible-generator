@@ -11,6 +11,7 @@ platform_image_mapping:
   Fedora: "{{ fedora | default('fedora-systemd') }}"
   opensuse: "{{ opensuse | default('docker-opensuse-systemd') }}"
   Ubuntu: "{{ ubuntu | default('docker-ubuntu-systemd') }}"
+  Kali: kali
 
 # A map that relates a container name to the URL of that container on Docker Hub.
 image_docker_hub_url_mapping:
@@ -22,6 +23,7 @@ image_docker_hub_url_mapping:
   fedora: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/fedora/general"
   opensuse: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/opensuse/general"
   ubuntu: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/ubuntu/general"
+  kali: "https://hub.docker.com/repository/docker/{{ docker_namespace }}/kali/general"
 
 # This maps the Galaxy distribution and version to Docker images.
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.versions` to the tag of the Docker container.
@@ -43,7 +45,7 @@ distribution_version_mapping:
   Debian:
     all:
       - latest
-      - bookworm
+      # - bookworm
     bullseye:
       - latest
     bookworm:
@@ -87,6 +89,9 @@ distribution_version_mapping:
       - focal
     bionic:
       - bionic
+  Kali:
+    all:
+      - latest
 
 # To schedule CI on different days of the month, this is a map that relates a letter to a day of the month.
 letter_day_mapping:
