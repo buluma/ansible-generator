@@ -80,15 +80,18 @@ distribution_version_mapping:
       - latest
   Ubuntu:
     all:
-      - latest
-      - focal
-      - bionic
+      - latest # 22.04
+      - focal # 20.04
+      - bionic # 18.04
+      - lunar # rolling
     jammy:
       - latest
     focal:
       - focal
     bionic:
       - bionic
+    lunar:
+      - lunar
   Kali:
     all:
       - latest

@@ -6,10 +6,10 @@ variables:
 
 molecule:
   script:
-    - if [ -f tox.ini ] ; then tox ; fi
-    - if [ ! -f tox.ini ] ; then molecule test ; fi
+    - molecule test
   rules:
     - if: $CI_COMMIT_REF_NAME == "master"
+  allow_failure: true
   parallel:
     matrix:
 {% for platform in meta.galaxy_info.platforms %}

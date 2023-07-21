@@ -177,3 +177,7 @@
       ansible.builtin.command:
         cmd: pre-commit install
         creates: .git/hooks/pre-commit
+
+    # - name: Push to GitHub
+    #   ansible.builtin.command:
+    #     cmd: git add . && git commit -m "Versions Update, cleanup." && git push -f
