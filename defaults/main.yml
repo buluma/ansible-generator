@@ -19,3 +19,9 @@ author: Shadow Walker (bulumaknight@gmail.com)
 
 # The full URL to your website.
 author_website: "https://buluma.github.io/"
+
+# The container to use for GitLab CI.
+gitlab_container: "buluma/github-action-molecule:5.0.9"
+
+# The molecule action to use.
+molecule_action: "buluma/molecule-action@5.0.9"
