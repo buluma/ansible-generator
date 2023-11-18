@@ -21,7 +21,13 @@ author: Shadow Walker (bulumaknight@gmail.com)
 author_website: "https://buluma.github.io/"
 
 # The container to use for GitLab CI.
-gitlab_container: "buluma/github-action-molecule:5.0.9"
+gitlab_container: "buluma/github-action-molecule:5.1.1"
 
 # The molecule action to use.
-molecule_action: "buluma/molecule-action@5.0.9"
+molecule_action: "buluma/molecule-action@v5.1.1"
+
+# Would you like to add a sponsor message?
+sponsored_message: yes
+
+# A custom message can be placed with this content.
+custom_message: "Also see a [full explanation and example](https://buluma.github.io/how-to-use-these-roles.html) on how to use these roles."

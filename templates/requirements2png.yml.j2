@@ -14,12 +14,12 @@ jobs:
       contents: write
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: {% raw %}${{ github.repository }}{% endraw %}
 
       - name: create png
-        uses: buluma/graphviz-action@1.0.0 # TODO: Update action
+        uses: buluma/graphviz-action@1.0.0  # TODO: Update action
       - name: Commit files
         run: |
           cd {% raw %}${{ github.repository }}{% endraw %}
