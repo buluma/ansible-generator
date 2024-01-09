@@ -5,14 +5,29 @@ name: "TODO 2 Issue"
 
 on:
   push:
+    branches:
+      - master
+      - main
+    paths-ignore:
+      - '**/README.md'
+      - '**/CHANGELOG.md'
+    tags_ignore:
+      - '*'
+
+permissions: write-all
+
+concurrency:
+  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
+
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: "ubuntu-20.04"
     steps:
-      - uses: "actions/checkout@master"
+      - uses: "actions/checkout@v4"
       - name: "TODO to Issue"
-        uses: "alstr/todo-to-issue-action@v2.3"  # TODO: Update buluma/todo-to-issue-action@v1.0.1 @buluma
+        uses: "buluma/todo-to-issue-action@v2.0.2"
         id: "todo"
         with:
           TOKEN: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}

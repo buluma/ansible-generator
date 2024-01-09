@@ -1,11 +1,21 @@
 ---
 {{ ansible_managed | comment }}
 
+name: Ansible Graphviz
 on:
   push:
+    branches:
+      - master
+      - main
     paths:
       - '.github/workflows/requirements2png.yml'
-name: Ansible Graphviz
+    tags_ignore:
+      - '*'
+
+concurrency:
+  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
+
+  cancel-in-progress: true
 
 jobs:
   build:

@@ -9,17 +9,23 @@ on:
       - master
       - main
       - testing
+      - dependabot/**
+      - renovate/**
     paths-ignore:
       - '**/README.md'
       - '**/CHANGELOG.md'
     tags_ignore:
       - '*'
   pull_request:
+  pull_request_target:
   schedule:
-    - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} {{ letter_day_mapping[role_name[0]] }} * *'
+    # - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} {{ letter_day_mapping[role_name[0]] }} * *'
+    - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} * * *'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+permissions: write-all
 
 concurrency:
   group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
@@ -35,8 +41,6 @@ jobs:
       - name: ansible-lint
         uses: ansible-community/ansible-lint-action@main
   test:
-    needs:
-      - lint
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -51,16 +55,12 @@ jobs:
 {% endfor %}
 {% endfor %}
     steps:
-      - name: checkout
+      - name: Checkout Role
         uses: actions/checkout@v4
         with:
           path: {% raw %}"${{ github.repository }}"{% endraw %}
 
-      # - name: disable apparmor for mysql
-      #   run: sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
-      # - name: parse apparmor for mysql
-      #   run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
-      - name: molecule
+      - name: Running Molecule Test
         uses: {{ molecule_action }}
         with:
           image: {% raw %}${{ matrix.config.image }}{% endraw %}
@@ -73,3 +73,32 @@ jobs:
           {{ item.variable }}: {% raw %}${{ {%endraw %}{{ item.name }} {% raw %}}}{% endraw %}
 {% endfor %}
 {% endif %}
+
+  dependabot:
+    needs:
+      - lint
+      - test
+    runs-on: ubuntu-latest
+    if: ${% raw %}{{ github.actor == 'dependabot[bot]' || github.actor == 'buluma' && github.event_name == 'pull_request'}}{% endraw %}
+
+    steps:
+      - uses: "actions/checkout@master"
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1
+        with:
+          github-token: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}
+
+      - name: Approve a PR
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${% raw %}{{github.event.pull_request.html_url}}{% endraw %}
+
+          GITHUB_TOKEN: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}
+
+      - name: "Merge Dependabot PR"
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${% raw %}{{github.event.pull_request.html_url}}{% endraw %}
+
+          GITHUB_TOKEN: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}

@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: buluma
+  author: robertdebock
   role_name: version
   description: Install and configure version on your system.
   license: Apache-2.0

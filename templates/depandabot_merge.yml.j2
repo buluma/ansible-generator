@@ -4,19 +4,23 @@
 name: "Dependabot Merge"
 
 on:
+  pull_request:
   pull_request_target:
 
 permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: ${% raw %}{{ github.ref }}-${{ github.workflow }}{% endraw %}
+
+  cancel-in-progress: true
+
+
 jobs:
-  build:
-    runs-on: "ubuntu-20.04"
+  dependabot_merge:
+    runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@master"
-      - name: "Merge Dependabot PR"
-        run: gh pr merge --auto --merge "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}
+      - name: Dependabot Auto Merge Action
+        uses: buluma/dependabot-auto-merge-action@v2.0.2

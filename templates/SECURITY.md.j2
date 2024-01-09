@@ -13,9 +13,9 @@ These version of [ansible](https://pypi.org/project/ansible/) are supported:
 | {{ version }}       | :white_check_mark: |
 {% endfor %}
 {% else %}
+| 9       | :white_check_mark: |
+| 8       | :white_check_mark: |
 | 7       | :white_check_mark: |
-| 6       | :white_check_mark: |
-| 5       | :white_check_mark: |
 {% endif %}
 
 ## [Reporting a Vulnerability](#reporting-a-vulnarability)
@@ -26,4 +26,6 @@ Tell them where to go, how often they can expect to get an update on a
 reported vulnerability, what to expect if the vulnerability is accepted or
 declined, etc.
 
+{% if sponsored_message %}
 Please consider [sponsoring me](https://github.com/sponsors/{{ github_namespace }}).
+{% endif %}

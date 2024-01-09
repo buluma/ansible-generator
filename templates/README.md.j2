@@ -1,10 +1,10 @@
-# [Ansible role {{ role_name }}](#{{ role_name }})
+# Ansible role [{{ role_name }}](https://galaxy.ansible.com/ui/standalone/roles/{{ github_namespace }}/{{ role_name }}/documentation)
 
 {{ meta.galaxy_info.description }}
 
-|GitHub|GitLab|Downloads|Version|Issues|Pull Requests|
-|------|------|-------|-------|------|-------------|
-|[![github](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/workflows/Ansible%20Molecule/badge.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/actions)|[![gitlab](https://gitlab.com/{{ gitlab_namespace }}/ansible-role-{{ role_name }}/badges/master/pipeline.svg)](https://gitlab.com/{{ gitlab_namespace }}/ansible-role-{{ role_name }})|[![downloads](https://img.shields.io/ansible/role/d/{{ galaxy_id.stdout |default('unset') }})](https://galaxy.ansible.com/{{ github_namespace }}/{{ role_name }})|[![Version](https://img.shields.io/github/release/{{ github_namespace }}/ansible-role-{{ role_name }}.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/releases/)|[![Issues](https://img.shields.io/github/issues/{{ github_namespace }}/ansible-role-{{ role_name }}.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/issues/)|[![PullRequests](https://img.shields.io/github/issues-pr-closed-raw/{{ github_namespace }}/ansible-role-{{ role_name }}.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/pulls/)|
+|GitHub|Version|Issues|Pull Requests|Downloads|
+|------|-------|------|-------------|---------|
+|[![github](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/actions/workflows/molecule.yml/badge.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/actions/workflows/molecule.yml)|[![Version](https://img.shields.io/github/release/{{ github_namespace }}/ansible-role-{{ role_name }}.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/releases/)|[![Issues](https://img.shields.io/github/issues/{{ github_namespace }}/ansible-role-{{ role_name }}.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/issues/)|[![PullRequests](https://img.shields.io/github/issues-pr-closed-raw/{{ github_namespace }}/ansible-role-{{ role_name }}.svg)](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/pulls/)|[![Ansible Role](https://img.shields.io/ansible/role/d/{{ github_namespace }}/{{ role_name }})](https://galaxy.ansible.com/ui/standalone/roles/{{ github_namespace }}/{{ role_name }}/documentation)|
 
 ## [Example Playbook](#example-playbook)
 
@@ -40,10 +40,10 @@ The default values for the variables are set in [`defaults/main.yml`](https://gi
 
 The following roles are used to prepare a system. You can prepare your system in another way.
 
-| Requirement | GitHub | GitLab |
+| Requirement | GitHub | Version |
 |-------------|--------|--------|
 {% for requirement in requirements.roles %}
-|[{{ requirement.name }}](https://galaxy.ansible.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.') }})|[![Build Status GitHub](https://github.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.', 'ansible-role-') }}/workflows/Ansible%20Molecule/badge.svg)](https://github.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.', 'ansible-role-') }}/actions)|[![Build Status GitLab](https://gitlab.com/{{ gitlab_namespace }}/{{ requirement.name | regex_replace(galaxy_namespace + '\.', 'ansible-role-') }}/badges/master/pipeline.svg)](https://gitlab.com/{{ gitlab_namespace }}/{{ requirement.name | regex_replace(galaxy_namespace + '\.', 'ansible-role-') }})|
+|[{{ requirement.name }}](https://galaxy.ansible.com/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.') }})|[![Ansible Molecule](https://github.com/{{ github_namespace }}/{{ requirement.name | regex_replace(galaxy_namespace + '\.', 'ansible-role-') }}/actions/workflows/molecule.yml/badge.svg)](https://github.com/{{ github_namespace }}/{{ requirement.name | regex_replace(galaxy_namespace + '\.', 'ansible-role-') }}/actions/workflows/molecule.yml)|[![Version](https://img.shields.io/github/release/{{ github_namespace }}/{{ requirement.name | regex_replace(github_namespace + '\.', 'ansible-role-') }}.svg)](https://github.com/{{ gitlab_namespace }}/{{ requirement.name | regex_replace(galaxy_namespace + '\.', 'ansible-role-') }})|
 {% endfor %}
 {% endif %}
 
@@ -89,14 +89,12 @@ If you find issues, please register them in [GitHub](https://github.com/{{ githu
 
 ## [License](#license)
 
-[{{ meta.galaxy_info.license }}](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/blob/master/LICENSE).
+[{{ meta.galaxy_info.license }}](https://github.com/{{ github_namespace }}/ansible-role-{{ role_name }}/blob/master/LICENSE)
 
 ## [Author Information](#author-information)
 
-[{{ meta.galaxy_info.author }}]({{ author_website }})
+[Shadow Walker]({{ author_website }})
 
+{% if sponsored_message %}
 Please consider [sponsoring me](https://github.com/sponsors/{{ github_namespace }}).
-
-### [Special Thanks](#special-thanks)
-
-Template inspired by [Robert de Bock](https://github.com/robertdebock)
+{% endif %}

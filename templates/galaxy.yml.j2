@@ -15,3 +15,5 @@ jobs:
         uses: robertdebock/galaxy-action@1.2.1
         with:
           galaxy_api_key: {% raw %}${{ secrets.galaxy_api_key }}{% endraw %}
+
+          git_branch: {% raw %}${{ github.event.repository.default_branch }}{% endraw %}

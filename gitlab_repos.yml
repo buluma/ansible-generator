@@ -1,0 +1,42 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: configure gitlab repository
+  hosts: localhost
+  become: no
+  gather_facts: no
+
+  vars:
+    namespace: buluma
+
+  vars_files:
+    # - defaults/main.yml
+    - vars/main.yml
+    - vars/vault.yml
+
+  tasks:
+    - name: Create GitLab Project in group Ansible
+      gitlab_project:
+        api_url: https://gitlab.com/
+        validate_certs: True
+        # api_username: buluma
+        api_token: "{{ gitlab_private_token }}"
+        name: my_first_project
+        group: buluma_ansible
+        issues_enabled: False
+        wiki_enabled: True
+        snippets_enabled: True
+        import_url: https://github.com/buluma/ansible-role-bootstrap.git
+        state: present
+      delegate_to: localhost
+
+    - name: list pipelines
+      uri:
+        # url: "https://gitlab.com/api/v4/projects/{{ encoded_path }}/pipeline_schedules"
+        url: "https://gitlab.com/api/v4/projects/buluma_ansible/my_first_project/pipeline_schedules"
+        method: GET
+        headers:
+          PRIVATE-TOKEN: "{{ gitlab_private_token }}"
+      register: gitlab_schedules
+
+    - name: check gitlab_schedules
+      ansible.builtin.debug: var=gitlab_schedules

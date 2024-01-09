@@ -1,0 +1,183 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Generate all files
+  hosts: localhost
+  become: no
+  gather_facts: yes
+  gather_subset:
+    - min
+
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: Set role_path and role_name
+      ansible.builtin.set_fact:
+        role_path: "{{ lookup('env', 'PWD') }}"
+        role_name: "{{ lookup('env', 'PWD') | basename | regex_replace('ansible-role-') }}"
+
+    - name: Load generators defaults/main.yml
+      ansible.builtin.include_vars:
+        file: defaults/main.yml
+
+    - name: Load meta/main.yml
+      ansible.builtin.include_vars:
+        file: "{{ role_path }}/meta/main.yml"
+        name: meta
+
+    - name: Check meta/preferences.yml
+      ansible.builtin.stat:
+        path: "{{ role_path }}/meta/preferences.yml"
+      register: preferencesymlstat
+
+    - name: Load meta/preferences.yml
+      ansible.builtin.include_vars:
+        file: "{{ role_path }}/meta/preferences.yml"
+      when:
+        - preferencesymlstat.stat.exists | bool
+
+    - name: Check defaults/main.yml
+      ansible.builtin.stat:
+        path: "{{ role_path }}/defaults/main.yml"
+      register: defaultsmainyml
+
+    - name: Load defaults/main.yml
+      ansible.builtin.slurp:
+        src: "{{ role_path }}/defaults/main.yml"
+      register: variables
+      when:
+        - defaultsmainyml.stat.exists | bool
+
+    - name: Check requirements.yml
+      ansible.builtin.stat:
+        path: "{{ role_path }}/requirements.yml"
+      register: check_requirements
+
+    - name: Load requirements.yml
+      ansible.builtin.include_vars:
+        file: "{{ role_path }}/requirements.yml"
+        name: requirements
+      when:
+        - check_requirements.stat.exists | bool
+
+    # - name: Check dependabot_merge.yml
+    #   ansible.builtin.stat:
+    #     path: "{{ role_path }}/dependabot_merge.yml"
+    #   register: check_dependabot_merge
+    #
+    # - name: Load dependabot_merge.yml
+    #   ansible.builtin.include_vars:
+    #     file: "{{ role_path }}/dependabot_merge.yml"
+    #     name: dependabot_merge
+    #   when:
+    #     - check_dependabot_merge.stat.exists | bool
+
+    - name: Load molecule/default/converge.yml
+      ansible.builtin.slurp:
+        src: "{{ role_path }}/molecule/default/converge.yml"
+      register: example
+
+    - name: Check molecule/default/prepare.yml
+      ansible.builtin.stat:
+        path: "{{ role_path }}/molecule/default/prepare.yml"
+      register: check_prepare
+
+    - name: Load molecule/default/prepare.yml
+      ansible.builtin.slurp:
+        src: "{{ role_path }}/molecule/default/prepare.yml"
+      register: prepare
+      when:
+        - check_prepare.stat.exists | bool
+
+    - name: Check molecule/default/verify.yml
+      ansible.builtin.stat:
+        path: "{{ role_path }}/molecule/default/verify.yml"
+      register: verify
+
+    - name: Load molecule/default/verify.yml
+      ansible.builtin.slurp:
+        src: "{{ role_path }}/molecule/default/verify.yml"
+      register: verifyyml
+      when:
+        - verify.stat.exists | bool
+
+    - name: Load galaxy_id
+      ansible.builtin.shell:
+        cmd: "set -o pipefail ; ansible-galaxy info {{ galaxy_namespace }}.{{ role_name }} | grep '	id: ' | awk '{print $NF}'"  # noqa no-tabs
+      register: galaxy_id
+      changed_when: no
+      failed_when: no
+
+    - name: Create .github directories
+      ansible.builtin.file:
+        path: "{{ role_path }}/{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - .github
+        - .github/workflows
+        - .github/ISSUE_TEMPLATE
+
+    - name: Copy file
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/files/{{ item.source }}"
+        dest: "{{ role_path }}/{{ item.dest | default(item.source) }}"
+        mode: "{{ item.mode | default('0644') }}"
+      with_items:
+        - source: gitignore
+          dest: .gitignore
+        - source: yamllint
+          dest: .yamllint
+        - source: pre-commit-config.yaml
+          dest: .pre-commit-config.yaml
+      loop_control:
+        label: "{{ item.source }}"
+
+    - name: Render file
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/{{ item.source }}.j2"
+        dest: "{{ role_path }}/{{ item.dest | default(item.source) }}"
+        mode: "0644"
+      with_items:
+        - source: README.md
+        # - source: ansible-lint
+        #   dest: .ansible-lint
+        - source: tox.ini
+        - source: settings.yml
+          dest: .github/settings.yml
+        - source: LICENSE-2.0.txt
+          dest: LICENSE
+        - source: SECURITY.md
+        - source: molecule.yml
+          dest: molecule/default/molecule.yml
+        - source: CONTRIBUTING.md
+        - source: molecule-action.yml
+          dest: .github/workflows/molecule.yml
+        - source: galaxy.yml
+          dest: .github/workflows/galaxy.yml
+        - source: todo-action.yml
+          dest: .github/workflows/todo.yml
+        - source: gitlab-ci.yml
+          dest: .gitlab-ci.yml
+        - source: requirements.txt
+        - source: requirements2png.yml
+          dest: .github/workflows/requirements2png.yml
+        # - source: dependabot_merge.yml
+        #   dest: .github/workflows/dependabot_merge.yml
+        - source: FUNDING.yml
+          dest: .github/FUNDING.yml
+        - source: bug_report.md
+          dest: .github/ISSUE_TEMPLATE/bug_report.md
+        - source: feature_request.md
+          dest: .github/ISSUE_TEMPLATE/feature_request.md
+      loop_control:
+        label: "{{ item.source }}"
+
+    - name: Install pre-commit
+      ansible.builtin.command:
+        cmd: pre-commit install
+        creates: .git/hooks/pre-commit
+
+    # - name: Push to GitHub
+    #   ansible.builtin.command:
+    #     cmd: git add . && git commit -m "Use new container/action." && git push -f

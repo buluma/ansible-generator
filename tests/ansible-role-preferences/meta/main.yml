@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: buluma
+  author: robertdebock
   role_name: preferences
   description: Install and configure preferences on your system.
   license: Apache-2.0

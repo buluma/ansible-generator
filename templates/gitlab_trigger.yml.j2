@@ -1,0 +1,53 @@
+---
+name: Mirror and run GitLab CI
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - testing
+      - dependabot/**
+      - renovate/**
+    paths-ignore:
+      - '**/README.md'
+      - '**/CHANGELOG.md'
+
+concurrency:
+  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
+
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: "{% raw %}${{ secrets.SLACK_WEBHOOK_URL }}{% endraw %}"
+    steps:
+      - uses: act10ns/slack@v1
+        with:
+          status: starting
+          channel: "#ansible"
+          message: Starting {{ github_namespace }}.{{ role_name }} GitLab Trigger...
+        if: always()
+      - uses: actions/checkout@v4
+      - name: Mirror + trigger CI
+        uses: buluma/gitlab-mirror-ci-action@1.0.7
+        with:
+          args: "buluma/ansible-role-{{ role_name }}"
+        env:
+          GITLAB_HOSTNAME: "gitlab.com"
+          GITLAB_USERNAME: "{{ github_namespace }}"
+
+          GITLAB_PASSWORD: {% raw %}${{ secrets.GITLAB_PASSWORD }}{% endraw %}
+
+          GITLAB_PROJECT_ID: "3340722x"
+          GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+
+      - name: Slack Notification
+        uses: act10ns/slack@v1
+        with:
+          status: "{% raw %}${{ job.status }}{% endraw %}"
+          steps: "{% raw %}${{ toJson(steps) }}{% endraw %}"
+          channel: "#ansible"
+        if: always()
