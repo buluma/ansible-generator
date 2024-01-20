@@ -24,7 +24,7 @@ author_website: "https://buluma.github.io/"
 gitlab_container: "buluma/github-action-molecule:5.1.1"
 
 # The molecule action to use.
-molecule_action: "buluma/molecule-action@v6.0.0"
+molecule_action: "buluma/molecule-action@v6.0.3"
 
 # Would you like to add a sponsor message?
 sponsored_message: no
@@ -52,9 +52,9 @@ generate_github_action_todo: yes
 generate_github_release_drafter: yes
 generate_github_release_config: yes
 generate_gitlab_ci: no
-generate_requirements_txt: no
-generate_requirements2png: no
+generate_requirements_txt: yes
+generate_requirements2png: yes
 generate_github_funding: no
-generate_github_issue_template: no
-generate_github_feature_template: no
+generate_github_issue_template: yes
+generate_github_feature_template: yes
 generate_install_pre_commit: yes
