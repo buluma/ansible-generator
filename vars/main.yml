@@ -35,8 +35,11 @@ distribution_version_mapping:
     all:
       - 1
       - latest
+      - 2023
     "2018.03":
       - 1
+    "2023":
+      - 2023
     Candidate:
       - latest
   Archlinux:
