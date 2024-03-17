@@ -24,7 +24,7 @@ author_website: "https://buluma.github.io/"
 gitlab_container: "buluma/github-action-molecule:5.1.1"
 
 # The molecule action to use.
-molecule_action: "buluma/molecule-action@v6.0.3"
+molecule_action: "buluma/molecule-action@v24.2.0"
 
 # Would you like to add a sponsor message?
 sponsored_message: no
