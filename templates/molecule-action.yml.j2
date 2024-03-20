@@ -10,7 +10,7 @@ on:
       - main
       - testing
       - dependabot/**
-      - renovate/**
+      # - renovate/**
     paths-ignore:
       - '**/README.md'
       - '**/CHANGELOG.md'
@@ -22,7 +22,6 @@ on:
     # - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} {{ letter_day_mapping[role_name[0]] }} * *'
     - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} * * *'
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 permissions: write-all
@@ -41,9 +40,9 @@ jobs:
       - name: ansible-lint
         uses: ansible-community/ansible-lint-action@main
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
-      fail-fast: no
+      fail-fast: false
       matrix:
         config:
 {% for platform in meta.galaxy_info.platforms %}
@@ -78,7 +77,7 @@ jobs:
     needs:
       - lint
       - test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: ${% raw %}{{ github.actor == 'dependabot[bot]' || github.actor == 'buluma' && github.event_name == 'pull_request'}}{% endraw %}
 
     steps:
