@@ -3,7 +3,7 @@
 - name: Generate all files
   hosts: localhost
   become: no
-  gather_facts: yes
+  gather_facts: true
   gather_subset:
     - min
 

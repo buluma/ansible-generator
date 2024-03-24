@@ -2,8 +2,8 @@
 ---
 - name: push role to galaxy
   hosts: localhost
-  become: no
-  gather_facts: no
+  become: false
+  gather_facts: false
   gather_subset:
     - min
 
@@ -19,11 +19,11 @@
 
     - name: push tags to github
       shell: "set -o pipefail ; git push --tags"
-      changed_when: no
-      failed_when: no
+      changed_when: false
+      failed_when: false
 
     - name: push to galaxy
       shell: "set -o pipefail ; ansible-galaxy role import --api-key {{ GALAXY_API_KEY }} {{ galaxy_namespace }} ansible-role-{{ role_name }}"
       register: galaxy_push
-      changed_when: no
-      failed_when: no
+      changed_when: false
+      failed_when: false
