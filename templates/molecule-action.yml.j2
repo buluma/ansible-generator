@@ -101,3 +101,14 @@ jobs:
           PR_URL: ${% raw %}{{github.event.pull_request.html_url}}{% endraw %}
 
           GITHUB_TOKEN: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}
+
+  test_role:
+    needs:
+      - lint
+      - test
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: "actions/checkout@master"
+      - name: Test Role
+        run: {% raw %}"ansible-galaxy role import --api-key {{ secrets.galaxy_api_key }} buluma ${{ github.repository }}"{% endraw %}

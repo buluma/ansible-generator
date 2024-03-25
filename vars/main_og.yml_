@@ -3,15 +3,15 @@
 
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.name` to a name of a container.
 platform_image_mapping:
-  Alpine: "{{ alpine | default('docker-molecule-images') }}"
-  Amazon: "{{ amazonlinux | default('docker-molecule-images') }}"
-  Archlinux: "{{ archlinux | default('docker-molecule-images') }}"
-  Debian: "{{ debian | default('docker-molecule-images') }}"
+  Alpine: "{{ alpine | default('alpine-openrc') }}" # TODO: Refactor alpine Base
+  Amazon: amazonlinux
+  Archlinux: archlinux
+  Debian: "{{ debian | default('debian-systemd') }}" # TODO: Refactor debian base
   EL: "{{ enterprise_linux | default('enterpriselinux') }}"
-  Fedora: "{{ fedora | default('docker-molecule-images') }}"
-  opensuse: "{{ opensuse | default('docker-molecule-images') }}"
-  Ubuntu: "{{ ubuntu | default('docker-molecule-images') }}"
-  Kali: "{{ kali | default('docker-molecule-images') }}"
+  Fedora: "{{ fedora | default('fedora-systemd') }}"
+  opensuse: "{{ opensuse | default('docker-opensuse-systemd') }}"
+  Ubuntu: "{{ ubuntu | default('docker-ubuntu-systemd') }}"
+  Kali: kali
 
 # A map that relates a container name to the URL of that container on Docker Hub.
 image_docker_hub_url_mapping:
@@ -30,36 +30,28 @@ image_docker_hub_url_mapping:
 distribution_version_mapping:
   Alpine:
     all:
-      - alpine-openrc
+      - latest
   Amazon:
     all:
-      # - 1
-      - amazonlinux2023
-      - amazonlinux1
+      - 1
+      - latest
     "2018.03":
       - 1
-      - amazonlinux1
     Candidate:
-      - amazonlinux2023
-    amazonlinux1:
-      - amazonlinux1
+      - latest
   Archlinux:
     all:
-      - archlinux_latest
+      - latest
   Debian:
     all:
-      # - latest
-      - buster
+      - latest
       - bullseye
     bullseye:
       - bullseye
     buster:
       - buster
     bookworm:
-      - bookworm
-      # latest:
-      #  - bookworm
-      #  - debian_latest
+      - latest
   EL:
     all:
       # - 7
@@ -74,37 +66,31 @@ distribution_version_mapping:
       - latest
   Fedora:
     all:
-      # - latest
-      - 37
       - 38
-      - 39
-      - 40
+      - latest
       - rawhide
     "37":
-      - fedora37
+      - 37
     "38":
-      - fedora38
+      - 38
     "39":
-      - fedora39
+      - latest
     "40":
-      - fedora40
-    latest:
-      - fedora_latest
-    rawhide:
       - rawhide
   opensuse:
     all:
-      - opensuse
+      - latest
   Ubuntu:
     all:
-      - ubuntu_latest
+      - latest
       - focal
       - bionic
-      - jammy
       - lunar
       - noble
     jammy:
-      - jammy
+      - latest
+      - lunar
+      - noble
     focal:
       - focal
     bionic:
@@ -113,11 +99,10 @@ distribution_version_mapping:
       - noble
     lunar:
       - lunar
-    ubuntu_latest:
-      - ubuntu_latest
+      - noble
   Kali:
     all:
-      - kalilinux
+      - latest
 
 # To schedule CI on different days of the month, this is a map that relates a letter to a day of the month.
 letter_day_mapping:
