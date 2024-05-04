@@ -9,4 +9,4 @@
       - minimal_X is boolean
       - minimal_X = 0
       - minimal_X in [ "a", "b" ]
-    quiet: yes
+    quiet: true

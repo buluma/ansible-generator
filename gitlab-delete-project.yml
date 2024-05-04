@@ -2,8 +2,8 @@
 ---
 - name: delete a gitlab repository
   hosts: localhost
-  become: no
-  gather_facts: no
+  become: false
+  gather_facts: false
 
   vars:
     namespace: buluma
@@ -18,7 +18,7 @@
         that:
           - namespace is defined
           - role is defined
-        quiet: yes
+        quiet: true
 
     - name: urlencode path
       set_fact:

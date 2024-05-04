@@ -9,4 +9,4 @@
       - preferences_X is boolean
       - preferences_X = 0
       - preferences_X in [ "a", "b" ]
-    quiet: yes
+    quiet: true

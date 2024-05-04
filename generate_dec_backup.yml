@@ -2,8 +2,8 @@
 ---
 - name: Generate all files
   hosts: localhost
-  become: no
-  gather_facts: yes
+  become: false
+  gather_facts: true
   gather_subset:
     - min
 
@@ -105,10 +105,10 @@
 
     - name: Load galaxy_id
       ansible.builtin.shell:
-        cmd: "set -o pipefail ; ansible-galaxy info {{ galaxy_namespace }}.{{ role_name }} | grep '	id: ' | awk '{print $NF}'"  # noqa no-tabs
+        cmd: "set -o pipefail ; ansible-galaxy info {{ galaxy_namespace }}.{{ role_name }} | grep '	id: ' | awk '{print $NF}'"  # noqa false-tabs
       register: galaxy_id
-      changed_when: no
-      failed_when: no
+      changed_when: false
+      failed_when: false
 
     - name: Create .github directories
       ansible.builtin.file:

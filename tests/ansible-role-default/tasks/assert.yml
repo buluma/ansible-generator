@@ -9,4 +9,4 @@
       - default_X is boolean
       - default_X = 0
       - default_X in [ "a", "b" ]
-    quiet: yes
+    quiet: true

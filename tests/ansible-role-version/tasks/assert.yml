@@ -9,4 +9,4 @@
       - version_X is boolean
       - version_X = 0
       - version_X in [ "a", "b" ]
-    quiet: yes
+    quiet: true

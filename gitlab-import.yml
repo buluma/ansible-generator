@@ -2,8 +2,8 @@
 ---
 - name: Import repository into gitlab project
   hosts: localhost
-  become: no
-  gather_facts: no
+  become: false
+  gather_facts: false
 
   vars:
     github_owner: buluma
@@ -21,7 +21,7 @@
           - gitlab_namespace is defined
           - github_owner is defined
           - role is defined
-        quiet: yes
+        quiet: true
 
     - name: Get GitHub repo information
       uri:

@@ -2,8 +2,8 @@
 ---
 - name: Create a pull mirror gitlab project
   hosts: localhost
-  become: no
-  gather_facts: no
+  become: false
+  gather_facts: false
 
   vars:
     github_owner: buluma
@@ -20,7 +20,7 @@
         that:
           - github_owner is defined
           - role is defined
-        quiet: yes
+        quiet: true
 
     - name: Get a detailed list of owned GitLab projects
       uri:
@@ -28,7 +28,7 @@
         method: GET
         headers:
           PRIVATE-TOKEN: "{{ gitlab_private_token }}"
-        return_content: yes
+        return_content: true
       register: gitlab_projects
 
     - name: Pick project_ids from GitLab projects
@@ -51,4 +51,4 @@
         status_code:
           - 200
       register: create_project
-      changed_when: yes
+      changed_when: true

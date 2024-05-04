@@ -1,26 +1,26 @@
 ---
 
 # Don't generate GitHub CI configuration file
-generate_github_settings: no
-generate_github_action_molecule: no
-generate_github_action_galaxy: no
-generate_github_action_todo: no
-generate_github_funding: no
-generate_github_issue_template: no
-generate_github_feature_template: no
+generate_github_settings: false
+generate_github_action_molecule: false
+generate_github_action_galaxy: false
+generate_github_action_todo: false
+generate_github_funding: false
+generate_github_issue_template: false
+generate_github_feature_template: false
 
 # The rest of the files generated are enabled by default.
-# generate_gitignore: yes
-# generate_yamllint: yes
-# generate_pre_commit: yes
-# generate_readme: yes
-# generate_ansible_lint: yes
-# generate_tox: yes
-# generate_license: yes
-# generate_security: yes
-# generate_molecule: yes
-# generate_contributing: yes
-# generate_gitlab_ci: yes
-# generate_requirements_txt: yes
-# generate_requirements2png: yes
-# generate_install_pre_commit: yes
+# generate_gitignore: true
+# generate_yamllint: true
+# generate_pre_commit: true
+# generate_readme: true
+# generate_ansible_lint: true
+# generate_tox: true
+# generate_license: true
+# generate_security: true
+# generate_molecule: true
+# generate_contributing: true
+# generate_gitlab_ci: true
+# generate_requirements_txt: true
+# generate_requirements2png: true
+# generate_install_pre_commit: true

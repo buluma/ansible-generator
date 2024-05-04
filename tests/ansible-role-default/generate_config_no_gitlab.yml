@@ -1,26 +1,26 @@
 ---
 
 # Don't generate GitLab CI configuration file
-generate_gitlab_ci: no
+generate_gitlab_ci: false
 
 # The rest of the files generated are enabled by default.
-# generate_gitignore: yes
-# generate_yamllint: yes
-# generate_pre_commit: yes
-# generate_readme: yes
-# generate_ansible_lint: yes
-# generate_tox: yes
-# generate_github_settings: yes
-# generate_license: yes
-# generate_security: yes
-# generate_molecule: yes
-# generate_contributing: yes
-# generate_github_action_molecule: yes
-# generate_github_action_galaxy: yes
-# generate_github_action_todo: yes
-# generate_requirements_txt: yes
-# generate_requirements2png: yes
-# generate_github_funding: yes
-# generate_github_issue_template: yes
-# generate_github_feature_template: yes
-# generate_install_pre_commit: yes
+# generate_gitignore: true
+# generate_yamllint: true
+# generate_pre_commit: true
+# generate_readme: true
+# generate_ansible_lint: true
+# generate_tox: true
+# generate_github_settings: true
+# generate_license: true
+# generate_security: true
+# generate_molecule: true
+# generate_contributing: true
+# generate_github_action_molecule: true
+# generate_github_action_galaxy: true
+# generate_github_action_todo: true
+# generate_requirements_txt: true
+# generate_requirements2png: true
+# generate_github_funding: true
+# generate_github_issue_template: true
+# generate_github_feature_template: true
+# generate_install_pre_commit: true

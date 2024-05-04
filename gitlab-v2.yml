@@ -2,8 +2,8 @@
 ---
 - name: configure gitlab repository
   hosts: localhost
-  become: no
-  gather_facts: yes
+  become: false
+  gather_facts: true
 
   vars:
     namespace: buluma
@@ -27,7 +27,7 @@
         that:
           - namespace is defined
           - role is defined
-        quiet: yes
+        quiet: true
 
     - name: urlencode path
       set_fact:
@@ -47,7 +47,7 @@
           register: check_variable
           failed_when:
             check_variable.json | length <= 0
-          ignore_errors: yes
+          ignore_errors: true
       rescue:
         - name: place variable
           uri:

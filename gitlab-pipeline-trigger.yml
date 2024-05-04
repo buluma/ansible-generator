@@ -2,8 +2,8 @@
 ---
 - name: Kick off a pipeline for a GitLab project
   hosts: localhost
-  become: no
-  gather_facts: no
+  become: false
+  gather_facts: false
 
   vars:
     gitlab_namespace: robertdebock-iac
@@ -19,7 +19,7 @@
         that:
           - gitlab_namespace is defined
           - role is defined
-        quiet: yes
+        quiet: true
 
     - name: Get GitLab project number
       uri:

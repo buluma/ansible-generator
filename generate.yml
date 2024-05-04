@@ -2,8 +2,8 @@
 ---
 - name: Generate all files
   hosts: localhost
-  become: no
-  gather_facts: yes
+  become: false
+  gather_facts: true
   gather_subset:
     - min
 

@@ -2,8 +2,8 @@
 ---
 - name: move_to_collections
   hosts: localhost
-  become: no
-  gather_facts: yes
+  become: false
+  gather_facts: true
   gather_subset:
     - min
 
@@ -19,5 +19,5 @@
     - name: move_to_collections
       shell: "set -o pipefail ; ../move_to_collections/transform.sh"
       register: transformed
-      changed_when: no
-      failed_when: no
+      changed_when: false
+      failed_when: false
