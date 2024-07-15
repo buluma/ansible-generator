@@ -55,33 +55,26 @@ distribution_version_mapping:
       - bullseye
     buster:
       - buster
-    bookworm:
-      - bookworm
+    # bookworm:
+    #   - bookworm
       # latest:
       #  - bookworm
       #  - debian_latest
   EL:
     all:
-      # - 7
       - 8
       - latest
     "7":
-      # - 7
-      - 8
+      - 7
     "8":
       - 8
     "9":
       - latest
   Fedora:
     all:
-      # - latest
-      - 37
       - 38
       - 39
       - 40
-      - rawhide
-    "37":
-      - fedora37
     "38":
       - fedora38
     "39":
@@ -97,11 +90,9 @@ distribution_version_mapping:
       - opensuse
   Ubuntu:
     all:
-      - ubuntu_latest
+      - ubuntu_latest  # noble as of 2024-04-25.
       - focal
-      - bionic
       - jammy
-      - lunar
       - noble
     jammy:
       - jammy

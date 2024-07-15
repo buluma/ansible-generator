@@ -119,6 +119,10 @@
           dest: .yamllint
         - source: pre-commit-config.yaml
           dest: .pre-commit-config.yaml
+        - source: pull_request_template.md
+          dest: .github/pull_request_template.md
+        - source: requirements.txt
+          dest: requirements.txt
       loop_control:
         label: "{{ item.source }}"
 
@@ -138,6 +142,9 @@
       when:
         - generate_ansible_lint
 
+    # Since May 2024, tox stopped working, throwing this error:
+    # CRITICAL Unable to contact the Docker daemon.
+    # Please refer to https://docs.docker.com/config/daemon/ for managing the daemon
     - name: Render file tox.ini
       ansible.builtin.template:
         src: "{{ playbook_dir }}/templates/tox.ini.j2"
@@ -145,6 +152,11 @@
         mode: "0644"
       when:
         - generate_tox
+
+    # - name: Remove tox.ini
+    #   ansible.builtin.file:
+    #     path: "{{ role_path }}/tox.ini"
+    #     state: absent
 
     - name: Render file .github/settings.yml
       ansible.builtin.template:
@@ -304,3 +316,21 @@
         creates: .git/hooks/pre-commit
       when:
         - generate_pre_commit
+
+    - name: Add all changes to git
+      ansible.builtin.command:
+        cmd: git add .
+      when: git_push
+
+    - name: Commit changes to git
+      ansible.builtin.command:
+        cmd: git commit -m "Ansible Generated Update"
+      when: git_push
+      register: git_commit
+
+    - name: Push changes to GitHub
+      ansible.builtin.command:
+        cmd: git push
+      when:
+        - git_push
+        - git_commit is succeeded
