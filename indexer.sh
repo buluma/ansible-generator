@@ -1,5 +1,5 @@
 # #!/bin/sh -x
-#
+
 # # A script to regenerate a list of roles and their CI status.
 #
 # # Print the header of the table.
