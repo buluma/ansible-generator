@@ -310,12 +310,12 @@
       when:
         - generate_github_feature_template
 
-    - name: Install pre-commit
-      ansible.builtin.command:
-        cmd: pre-commit install
-        creates: .git/hooks/pre-commit
-      when:
-        - generate_pre_commit
+    # - name: Install pre-commit
+    #   ansible.builtin.command:
+    #     cmd: pre-commit install
+    #     creates: .git/hooks/pre-commit
+    #   when:
+    #     - generate_pre_commit
 
     - name: Add all changes to git
       ansible.builtin.command:

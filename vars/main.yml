@@ -96,9 +96,9 @@ distribution_version_mapping:
   Ubuntu:
     all:
       - ubuntu_latest  # noble as of 2024-04-25.
-      - focal
       - jammy
       - noble
+      - plucky
     jammy:
       - jammy
     focal:
