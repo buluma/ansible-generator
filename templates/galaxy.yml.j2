@@ -8,12 +8,10 @@ on:
     types: [created, edited, published, released]
 jobs:
   release:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: galaxy
-        # uses: buluma/galaxy-action@v6.25.22  # TODO: rebuild action
+      # uses: buluma/galaxy-action@v6.25.22  # TODO: rebuild action
         uses: robertdebock/galaxy-action@1.2.1
         with:
           galaxy_api_key: {% raw %}${{ secrets.galaxy_api_key }}{% endraw %}
-
-          git_branch: {% raw %}${{ github.event.repository.default_branch }}{% endraw %}

@@ -78,9 +78,8 @@ distribution_version_mapping:
       - latest
   Fedora:
     all:
-      - 38
-      - 39
       - 40
+      - latest
     "38":
       - fedora38
     "39":
@@ -88,7 +87,7 @@ distribution_version_mapping:
     "40":
       - fedora40
     latest:
-      - fedora_latest
+      - fedora41
     rawhide:
       - rawhide
   opensuse:
@@ -110,6 +109,8 @@ distribution_version_mapping:
       - noble
     lunar:
       - lunar
+    plucky:
+      - plucky
     ubuntu_latest:
       - ubuntu_latest
   Kali:

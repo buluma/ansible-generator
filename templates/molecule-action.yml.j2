@@ -7,44 +7,27 @@ on:
   push:
     branches:
       - master
-      - main
-      - testing
-      - dependabot/**
-    paths-ignore:
-      - '**/README.md'
-      - '**/CHANGELOG.md'
-    tags_ignore:
-      - '*'
   pull_request:
-  pull_request_target:
   schedule:
-    - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} {{ letter_day_mapping[role_name[0]] }}/{{ letter_hour_mapping[role_name[0]] }} * *'
-
-  workflow_dispatch:
-
-permissions: write-all
-
-concurrency:
-  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
-
-  cancel-in-progress: true
+    - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} {{ letter_day_mapping[role_name[0]] }} * *'
 
 jobs:
   lint:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout Role
+      - name: checkout
         uses: actions/checkout@v4
-      - name: Run Ansible-lint
-        uses: ansible/ansible-lint@v24.7.0
-  test:
+      - name: ansible-lint
+        uses: ansible-community/ansible-lint-action@main
+
+  molecule:
     needs:
       - lint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        config:
+        distro:
 {% for platform in meta.galaxy_info.platforms %}
 {% for version in platform.versions %}
 {% for tag in distribution_version_mapping[platform.name][version] %}
@@ -54,53 +37,49 @@ jobs:
 {% endfor %}
 {% endfor %}
     steps:
-      - name: Checkout Role
+      - name: checkout
         uses: actions/checkout@v4
         with:
-          path: {% raw %}"${{ github.repository }}"{% endraw %}
+          path: ansible-role-{{ role_name }}
 
-      - name: Running Molecule Test
-        uses: {{ molecule_action }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          image: {% raw %}${{ matrix.config.image }}{% endraw %}
+          python-version: "3.13"
 
-          tag: {% raw %}${{ matrix.config.tag }}{% endraw %}
+      - name: Configure Docker for systemd
+        run: |
+          sudo mkdir -p /etc/docker
+          echo '{
+            "features": {
+              "buildkit": true
+            },
+            "exec-opts": ["native.cgroupdriver=systemd"]
+          }' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker || true
 
-      - name: Running Role Test
-        run: {% raw %}ansible-galaxy role import --api-key ${{ secrets.galaxy_api_key }} buluma ${{ github.event.repository.name }}{% endraw %}
+      - name: Install Docker
+        uses: docker/setup-buildx-action@v3
 
-{% if github_variables_mapping is defined %}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible-lint molecule molecule-plugins[docker] ansible-core
+          if [ -f ansible-role-{{ role_name }}/requirements.txt ]; then pip install -r ansible-role-{{ role_name }}/requirements.txt; fi
+          if [ -f ansible-role-{{ role_name }}/requirements.yml ]; then ansible-galaxy install -r ansible-role-{{ role_name }}/requirements.yml; fi
+
+          # Create proper role directory structure for molecule
+          mkdir -p ~/.ansible/roles
+          ln -s ${GITHUB_WORKSPACE}/ansible-role-{{ role_name }} ~/.ansible/roles/{{ galaxy_namespace }}.{{ role_name }}
+
+      - name: Test with molecule
+        run: |
+          cd ansible-role-{{ role_name }}
+          molecule test
         env:
-{% for item in github_variables_mapping %}
-          {{ item.variable }}: {% raw %}${{ {%endraw %}{{ item.name }} {% raw %}}}{% endraw %}
-{% endfor %}
-{% endif %}
+          PY_COLORS: 1
+          ANSIBLE_FORCE_COLOR: 1
+          ANSIBLE_ROLES_PATH: ~/.ansible/roles:${GITHUB_WORKSPACE}/ansible-role-{{ role_name }}
+          image: {% raw %}${{ matrix.distro.image }}{% endraw %}
 
-  dependabot:
-    needs:
-      - lint
-      - test
-    runs-on: ubuntu-22.04
-    if: ${% raw %}{{ github.actor == 'dependabot[bot]' || github.actor == 'buluma' && github.event_name == 'pull_request'}}{% endraw %}
-
-    steps:
-      - uses: "actions/checkout@master"
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v2
-        with:
-          github-token: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}
-
-      - name: Approve a PR
-        run: gh pr review --approve "$PR_URL"
-        env:
-          PR_URL: ${% raw %}{{github.event.pull_request.html_url}}{% endraw %}
-
-          GITHUB_TOKEN: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}
-
-      - name: "Merge Dependabot PR"
-        run: gh pr merge --auto --merge "$PR_URL"
-        env:
-          PR_URL: ${% raw %}{{github.event.pull_request.html_url}}{% endraw %}
-
-          GITHUB_TOKEN: ${% raw %}{{ secrets.GITHUB_TOKEN }}{% endraw %}
+          tag: {% raw %}${{ matrix.distro.tag }}{% endraw %}
