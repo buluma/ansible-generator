@@ -43,46 +43,48 @@ def get_repos():
             break
 
         for repo in data:
-            if repo["name"].startswith(PREFIX) and not repo["archived"]:
-                # Construct HTTPS URL with token for authentication
-                https_url = repo["clone_url"].replace("https://", f"https://oauth2:{GH_TOKEN}@")
-                repos.append(https_url)
+            if repo["name"].startswith(PREFIX):
+                repos.append(repo)
 
         page += 1
 
     return repos
 
-def clone_repo(repo_url):
+def process_repo(repo):
     """
-    Clone a repository into the CLONE_DIR.
+    Process a single repository.
     """
-    # The repo_url now contains the token for HTTPS authentication
-    repo_name = repo_url.split("/")[-1].replace(".git", "").split('@')[-1].replace('github.com/', '') # Extracting repo name from HTTPS URL with token
-
-    # Ensure repo_name is clean, sometimes there's an extra '/'
-    if '/' in repo_name:
-        repo_name = repo_name.split('/')[-1]
-
+    repo_name = repo["name"]
     clone_path = os.path.join(CLONE_DIR, repo_name)
+    archived_path = os.path.join(CLONE_DIR, f"archived-{repo_name}")
 
-    if os.path.exists(clone_path):
-        print(f"Repository {repo_name} already exists. Skipping.")
-        return
-
-    print(f"Cloning {repo_name} from {repo_url.split('@')[-1]} into {clone_path}...")
-    subprocess.run(["git", "clone", repo_url, clone_path], check=True)
+    if repo["archived"]:
+        if os.path.exists(clone_path):
+            print(f"Repository {repo_name} is archived and exists. Renaming to {archived_path}...")
+            os.rename(clone_path, archived_path)
+        elif os.path.exists(archived_path):
+            print(f"Archived repository {repo_name} already exists as {archived_path}. Skipping.")
+        else:
+            print(f"Repository {repo_name} is archived and does not exist locally. Skipping cloning.")
+    else:
+        if os.path.exists(clone_path):
+            print(f"Repository {repo_name} already exists. Skipping.")
+        else:
+            print(f"Cloning {repo_name}...")
+            https_url = repo["clone_url"].replace("https://", f"https://oauth2:{GH_TOKEN}@")
+            subprocess.run(["git", "clone", https_url, clone_path], check=True)
 
 if __name__ == "__main__":
     if not os.path.exists(CLONE_DIR):
         os.makedirs(CLONE_DIR)
 
     all_repos = get_repos()
-    print(f"Found {len(all_repos)} repositories to clone.")
+    print(f"Found {len(all_repos)} repositories to process.")
 
     if not all_repos:
         print("No repositories found or an error occurred. Exiting.")
     else:
-        for repo_url in all_repos:
-            clone_repo(repo_url)
+        for repo in all_repos:
+            process_repo(repo)
 
         print("Done.")
