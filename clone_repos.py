@@ -25,7 +25,8 @@ def clone_repositories(repositories, destination_folder, repo_prefix):
 
 if __name__ == "__main__":
     github_username = "buluma"
-    github_token = "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"  # Generate a token with repo scope from https://github.com/settings/tokens
+    # Generate a token with repo scope from https://github.com/settings/tokens
+    github_token = "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"
     repo_prefix = "ansible-role-"
 
     repos = get_user_repositories(github_username, github_token)
