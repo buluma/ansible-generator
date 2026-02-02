@@ -43,7 +43,7 @@ def get_repos():
             break
 
         for repo in data:
-            if repo["name"].startswith(PREFIX):
+            if repo["name"].startswith(PREFIX) and not repo["archived"]:
                 # Construct HTTPS URL with token for authentication
                 https_url = repo["clone_url"].replace("https://", f"https://oauth2:{GH_TOKEN}@")
                 repos.append(https_url)
