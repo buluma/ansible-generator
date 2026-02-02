@@ -1,0 +1,7 @@
+.molecule
+*.log
+*.swp
+.cache
+.DS_Store
+.ansible
+results-*.txt

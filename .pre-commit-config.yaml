@@ -10,7 +10,6 @@ repos:
       - id: end-of-file-fixer
       - id: sort-simple-yaml
       - id: check-shebang-scripts-are-executable
-      - id: detect-aws-credentials
   - repo: https://github.com/buluma/pre-commit
     rev: v1.0.3
     hooks:
