@@ -4,5 +4,5 @@
 #
 repository:
   description: Install and configure default on your system.
-  homepage: https://robertdebock.nl/
+  homepage: https://buluma.me.ke/
   topics: default, ansible, molecule, tox, playbook, hacktoberfest

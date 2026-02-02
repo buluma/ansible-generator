@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: robertdebock
+  author: buluma
   role_name: minimal
   description: Install and configure minimal on your system.
   license: Apache-2.0

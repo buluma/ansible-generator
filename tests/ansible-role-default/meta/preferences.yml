@@ -1,7 +1,7 @@
 ---
-# This file is used by [`ansible-generator`](https://github.com/robertdebock/ansible-generator).
+# This file is used by [`ansible-generator`](https://github.com/buluma/ansible-generator).
 
-# Overrule the Ansible versions that [tox](https://pypi.org/project/tox/) should test. Not mentioning this variable will use the [default Ansible version](https://github.com/robertdebock/ansible-generator/blob/master/templates/tox.ini.j2#L7).
+# Overrule the Ansible versions that [tox](https://pypi.org/project/tox/) should test. Not mentioning this variable will use the [default Ansible version](https://github.com/buluma/ansible-generator/blob/master/templates/tox.ini.j2#L7).
 # tox_ansible_versions:
 #   - 6
 #   - 7

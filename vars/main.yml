@@ -17,7 +17,6 @@ platform_image_mapping:
   Fedora: "{{ fedora | default('docker-molecule-images') }}"
   opensuse: "{{ opensuse | default('docker-molecule-images') }}"
   Ubuntu: "{{ ubuntu | default('docker-molecule-images') }}"
-  Kali: "{{ kali | default('docker-molecule-images') }}"
 
 # A map that relates a container name to the URL of that container on Docker Hub.
 image_docker_hub_url_mapping:
@@ -29,93 +28,61 @@ image_docker_hub_url_mapping:
   fedora: "https://hub.docker.com/r/{{ docker_namespace }}/fedora"
   opensuse: "https://hub.docker.com/r/{{ docker_namespace }}/opensuse"
   ubuntu: "https://hub.docker.com/r/{{ docker_namespace }}/ubuntu"
-  kali: "https://hub.docker.com/r/{{ docker_namespace }}/kali"
 
 # This maps the Galaxy distribution and version to Docker images.
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.versions` to the tag of the Docker container.
 distribution_version_mapping:
   Alpine:
     all:
-      - alpine-openrc
+      - latest
   Amazon:
     all:
-      # - 1
-      - amazonlinux2023
-      - amazonlinux1
-    "2018.03":
-      - 1
-      - amazonlinux1
+      - latest
     Candidate:
-      - amazonlinux2023
-    amazonlinux1:
-      - amazonlinux1
+      - latest
   Archlinux:
     all:
-      - archlinux_latest
+      - latest
   Debian:
     all:
-      # - latest
-      - buster
-      - bullseye
+      - latest  # 13 (trixie)
+      - bookworm  # 12
+      - bullseye  # 11
+    trixie:
+      - latest
     bullseye:
       - bullseye
-    buster:
-      - buster
-    # bookworm:
-    #   - bookworm
-      # latest:
-      #  - bookworm
-      #  - debian_latest
+    bookworm:
+      - bookworm
   EL:
     all:
-      - 8
       - latest
-    "7":
-      - 7
-    "8":
-      - 8
     "9":
       - latest
   Fedora:
     all:
-      - 40
+      # - 41  # This is a broken image.
       - latest
     "38":
-      - fedora38
+      - 38
     "39":
-      - fedora39
+      - 39
     "40":
-      - fedora40
-    latest:
-      - fedora41
-    rawhide:
+      - 40
+    "41": []
+      # - 41  # This is a broken image.
+    "42":
+      - latest
+    "43":
       - rawhide
-  opensuse:
-    all:
-      - opensuse
   Ubuntu:
     all:
-      - ubuntu_latest  # noble as of 2024-04-25.
-      - jammy
-      - noble
-      - plucky
+      - latest  # 24
+      - jammy  # 22
+    noble:
+      - latest
     jammy:
       - jammy
-    focal:
-      - focal
-    bionic:
-      - bionic
-    noble:
-      - noble
-    lunar:
-      - lunar
-    plucky:
-      - plucky
-    ubuntu_latest:
-      - ubuntu_latest
-  Kali:
-    all:
-      - kalilinux
 
 # To schedule CI on different days of the month, this is a map that relates a letter to a day of the month.
 letter_day_mapping:
@@ -145,16 +112,16 @@ letter_day_mapping:
   x: 24
   y: 25
   z: 26
-  0: 27
-  1: 27
-  2: 27
-  3: 27
-  4: 27
-  5: 27
-  6: 27
-  7: 27
-  8: 27
-  9: 27
+  "0": 27
+  "1": 27
+  "2": 27
+  "3": 27
+  "4": 27
+  "5": 27
+  "6": 27
+  "7": 27
+  "8": 27
+  "9": 27
 
 # To schedule CI on different hours of the day, this is a map that relates a letter to an hour of the day.
 letter_hour_mapping:
@@ -184,16 +151,16 @@ letter_hour_mapping:
   x: 22
   y: 22
   z: 22
-  0: 23
-  1: 23
-  2: 23
-  3: 23
-  4: 23
-  5: 23
-  6: 23
-  7: 23
-  8: 23
-  9: 23
+  "0": 23
+  "1": 23
+  "2": 23
+  "3": 23
+  "4": 23
+  "5": 23
+  "6": 23
+  "7": 23
+  "8": 23
+  "9": 23
 
 # To schedule CI on different days of the month, this is a map that relates a letter to a minute of the hour.
 letter_minute_mapping:
@@ -223,13 +190,13 @@ letter_minute_mapping:
   x: 47
   y: 49
   z: 51
-  0: 53
-  1: 55
-  2: 57
-  3: 59
-  4: 59
-  5: 59
-  6: 59
-  7: 59
-  8: 59
-  9: 59
+  "0": 53
+  "1": 55
+  "2": 57
+  "3": 59
+  "4": 59
+  "5": 59
+  "6": 59
+  "7": 59
+  "8": 59
+  "9": 59

@@ -8,6 +8,8 @@ on:
     branches:
       - master
   pull_request:
+    branches:
+      - master
   schedule:
     - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} {{ letter_day_mapping[role_name[0]] }} * *'
 
@@ -18,11 +20,12 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: ansible-lint
-        uses: ansible-community/ansible-lint-action@main
+        uses: ansible/ansible-lint@v25.9.2
 
   molecule:
     needs:
       - lint
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -64,13 +67,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install ansible-lint molecule molecule-plugins[docker] ansible-core
-          if [ -f ansible-role-{{ role_name }}/requirements.txt ]; then pip install -r ansible-role-{{ role_name }}/requirements.txt; fi
-          if [ -f ansible-role-{{ role_name }}/requirements.yml ]; then ansible-galaxy install -r ansible-role-{{ role_name }}/requirements.yml; fi
-
-          # Create proper role directory structure for molecule
-          mkdir -p ~/.ansible/roles
-          ln -s ${GITHUB_WORKSPACE}/ansible-role-{{ role_name }} ~/.ansible/roles/{{ galaxy_namespace }}.{{ role_name }}
+          pip3 install ansible molecule molecule-plugins[docker] docker
 
       - name: Test with molecule
         run: |

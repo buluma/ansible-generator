@@ -3,5 +3,5 @@
 
 - name: Include assert.yml
   ansible.builtin.import_tasks: assert.yml
-  run_once: true
+  run_once: yes
   delegate_to: localhost

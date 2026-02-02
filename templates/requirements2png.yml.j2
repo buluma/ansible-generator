@@ -1,7 +1,7 @@
+
 ---
 {{ ansible_managed | comment }}
 
-name: Ansible Graphviz
 on:
   push:
     branches:
@@ -9,17 +9,15 @@ on:
       - main
     paths:
       - '.github/workflows/requirements2png.yml'
-    tags_ignore:
-      - '*'
+  release:
+    types:
+      - published
 
-concurrency:
-  group: {% raw %}${{ github.ref }}-${{ github.workflow }}{% endraw %}
-
-  cancel-in-progress: true
+name: Ansible Graphviz
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
@@ -29,7 +27,7 @@ jobs:
           path: {% raw %}${{ github.repository }}{% endraw %}
 
       - name: create png
-        uses: buluma/graphviz-action@1.0.0  # TODO: Update action
+        uses: buluma/graphviz-action@1.0.0
       - name: Commit files
         run: |
           cd {% raw %}${{ github.repository }}{% endraw %}
