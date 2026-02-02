@@ -3,6 +3,9 @@
 name: 'yamllint'
 on:
   push:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.runId }}
+  cancel-in-progress: true
 
 jobs:
   yamllint:
