@@ -1,4 +1,15 @@
+# Generic
 .DS_Store
+*.log
+*.swp
+.cache
+
+# Python
+.tox
+
+# Ansible
 .ansible
-.clone_repos.py
+.molecule
+
+# Project specific
 clone_repos.py
