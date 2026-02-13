@@ -7,25 +7,33 @@ on:
   push:
     branches:
       - master
+      - main
   pull_request:
     branches:
       - master
+      - main
   schedule:
     - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} {{ letter_day_mapping[role_name[0]] }} * *'
+
+  workflow_dispatch:
+
+concurrency:
+  group: {% raw %}${{ github.ref }}{% endraw %}-{% raw %}${{ github.workflow }}{% endraw %}
+
+  cancel-in-progress: true
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: ansible-lint
-        uses: ansible/ansible-lint@v25.9.2
+        uses: ansible/ansible-lint@v26.1.1
 
   molecule:
     needs:
       - lint
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -41,12 +49,12 @@ jobs:
 {% endfor %}
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: ansible-role-{{ role_name }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
 

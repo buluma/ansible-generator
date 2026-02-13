@@ -16,6 +16,9 @@ platform_image_mapping:
   EL: "{{ enterprise_linux | default('enterpriselinux') }}"
   Fedora: "{{ fedora | default('docker-molecule-images') }}"
   Ubuntu: "{{ ubuntu | default('docker-molecule-images') }}"
+  opensuse: "{{ opensuse | default('docker-molecule-images') }}"
+  Kali: "{{ kali | default('docker-molecule-images') }}"
+  kali: "{{ kali | default('docker-molecule-images') }}"
 
 # A map that relates a container name to the URL of that container on Docker Hub.
 image_docker_hub_url_mapping:
@@ -26,6 +29,9 @@ image_docker_hub_url_mapping:
   el: "https://hub.docker.com/r/{{ docker_namespace }}/enterpriselinux"
   fedora: "https://hub.docker.com/r/{{ docker_namespace }}/fedora"
   ubuntu: "https://hub.docker.com/r/{{ docker_namespace }}/ubuntu"
+  opensuse: "https://hub.docker.com/r/{{ docker_namespace }}/opensuse"
+  Kali: "https://hub.docker.com/r/{{ docker_namespace }}/kalilinux"
+  kali: "https://hub.docker.com/r/{{ docker_namespace }}/kalilinux"
 
 # This maps the Galaxy distribution and version to Docker images.
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.versions` to the tag of the Docker container.
@@ -35,9 +41,16 @@ distribution_version_mapping:
       - latest
   Amazon:
     all:
-      - latest
+      # - 1
+      - amazonlinux2023
+      - amazonlinux1
+    "2018.03":
+      - 1
+      - amazonlinux1
     Candidate:
-      - latest
+      - amazonlinux2023
+    amazonlinux1:
+      - amazonlinux1
   Archlinux:
     all:
       - latest
@@ -54,7 +67,10 @@ distribution_version_mapping:
       - bookworm
   EL:
     all:
+      - 8
       - latest
+    "8":
+      - 8
     "9":
       - latest
   Fedora:
@@ -81,6 +97,15 @@ distribution_version_mapping:
       - latest
     jammy:
       - jammy
+  opensuse:
+    all:
+      - opensuse
+  Kali:
+    all:
+      - kalilinux
+  kali:
+    all:
+      - kalilinux
 
 # To schedule CI on different days of the month, this is a map that relates a letter to a day of the month.
 letter_day_mapping:
