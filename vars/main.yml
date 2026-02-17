@@ -75,26 +75,29 @@ distribution_version_mapping:
       - latest
   Fedora:
     all:
-      # - 41  # This is a broken image.
       - latest
-    "38":
-      - 38
-    "39":
-      - 39
-    "40":
-      - 40
-    "41": []
-      # - 41  # This is a broken image.
+      - 42
+      - 44
+      - 45
     "42":
-      - latest
+      - fedora42
     "43":
-      - rawhide
+      - fedora_latest
+    "44":
+      - fedora44
+    "45":
+      - fedora45
   Ubuntu:
     all:
+      - plucky
       - latest  # 24
       - jammy  # 22
     noble:
       - latest
+    lunar:
+      - lunar
+    plucky:
+      - plucky
     jammy:
       - jammy
   opensuse:
