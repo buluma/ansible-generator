@@ -38,7 +38,7 @@ image_docker_hub_url_mapping:
 distribution_version_mapping:
   Alpine:
     all:
-      - latest
+      - alpine-openrc_latest
   Amazon:
     all:
       # - 1
@@ -53,14 +53,14 @@ distribution_version_mapping:
       - amazonlinux1
   Archlinux:
     all:
-      - latest
+      - archlinux_latest
   Debian:
     all:
-      - latest  # 13 (trixie)
+      - debian_latest  # 13 (trixie)
       - bookworm  # 12
       - bullseye  # 11
     trixie:
-      - latest
+      - debian_latest
     bullseye:
       - bullseye
     bookworm:
@@ -75,10 +75,10 @@ distribution_version_mapping:
       - latest
   Fedora:
     all:
-      - latest
-      - 42
-      - 44
-      - 45
+      - fedora_latest
+      - fedora42
+      - fedora44
+      - fedora45
     "42":
       - fedora42
     "43":
@@ -90,10 +90,10 @@ distribution_version_mapping:
   Ubuntu:
     all:
       - plucky
-      - latest  # 24
+      - ubuntu_latest  # 24
       - jammy  # 22
     noble:
-      - latest
+      - ubuntu_latest
     lunar:
       - lunar
     plucky:
