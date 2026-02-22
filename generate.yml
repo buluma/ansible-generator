@@ -101,6 +101,7 @@
       when:
         - generate_github_settings or
           generate_github_action_molecule or
+          generate_github_action_pre_commit or
           generate_github_action_galaxy or
           generate_github_action_todo or
           generate_github_funding or
@@ -206,6 +207,14 @@
         mode: "0644"
       when:
         - generate_github_action_molecule
+
+    - name: Render file .github/workflows/pre-commit.yml
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/pre-commit-action.yml.j2"
+        dest: "{{ role_path }}/.github/workflows/pre-commit.yml"
+        mode: "0644"
+      when:
+        - generate_github_action_pre_commit
 
     - name: Render file .github/workflows/galaxy.yml
       ansible.builtin.template:

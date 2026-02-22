@@ -67,7 +67,6 @@ distribution_version_mapping:
       - bookworm
   EL:
     all:
-      - 8
       - latest
     "8":
       - 8
@@ -102,7 +101,7 @@ distribution_version_mapping:
       - jammy
   opensuse:
     all:
-      - opensuse
+      - opensuse-tumbleweed
   Kali:
     all:
       - kalilinux
