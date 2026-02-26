@@ -6,8 +6,10 @@ default_python_version:
   - "python:3.9"
   - "python:3.10"
   - "python:3.13"
+  - "python:3.15"
 
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.name` to a name of a container.
+# Keys are normalized through `platform_name_alias_mapping`.
 platform_image_mapping:
   Alpine: "{{ alpine | default('docker-molecule-images') }}"
   Amazon: "{{ amazonlinux | default('docker-molecule-images') }}"
@@ -17,20 +19,54 @@ platform_image_mapping:
   Fedora: "{{ fedora | default('docker-molecule-images') }}"
   Ubuntu: "{{ ubuntu | default('docker-molecule-images') }}"
   opensuse: "{{ opensuse | default('docker-molecule-images') }}"
+  SUSE: "{{ opensuse | default('docker-molecule-images') }}"
   Kali: "{{ kali | default('docker-molecule-images') }}"
   kali: "{{ kali | default('docker-molecule-images') }}"
+  RedHat: "{{ redhat | default('docker-molecule-images') }}"
+  CentOS: "{{ centos | default('docker-molecule-images') }}"
+  OracleLinux: "{{ oraclelinux | default('docker-molecule-images') }}"
+  Rocky: "{{ rockylinux | default('docker-molecule-images') }}"
+  RockyLinux: "{{ rockylinux | default('docker-molecule-images') }}"
+  AlmaLinux: "{{ almalinux | default('docker-molecule-images') }}"
+
+# Canonical platform key resolution using common Galaxy/Ansible aliases.
+platform_name_alias_mapping:
+  Alpine Linux: Alpine
+  Arch: Archlinux
+  Arch Linux: Archlinux
+  openSUSE: opensuse
+  OpenSUSE: opensuse
+  SUSE: opensuse
+  SLES: opensuse
+  Red Hat: RedHat
+  RedHat: RedHat
+  Red Hat Enterprise Linux: RedHat
+  Oracle Linux: OracleLinux
+  Rocky Linux: RockyLinux
+  Alma Linux: AlmaLinux
+  Amazon Linux: Amazon
+  Kali Linux: Kali
+
+# Default fallback values when a platform/version is not explicitly mapped.
+default_matrix_image: "{{ fallback_matrix_image | default('docker-molecule-images') }}"
+default_matrix_tag: latest
 
 # A map that relates a container name to the URL of that container on Docker Hub.
 image_docker_hub_url_mapping:
   alpine: "https://hub.docker.com/r/{{ docker_namespace }}/alpine"
   amazon: "https://hub.docker.com/r/{{ docker_namespace }}/amazonlinux"
   archlinux: "https://hub.docker.com/r/{{ docker_namespace }}/archlinux"
+  centos: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   debian: "https://hub.docker.com/r/{{ docker_namespace }}/debian"
   el: "https://hub.docker.com/r/{{ docker_namespace }}/enterpriselinux"
   fedora: "https://hub.docker.com/r/{{ docker_namespace }}/fedora"
+  redhat: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  oraclelinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  rocky: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  rockylinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  almalinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   ubuntu: "https://hub.docker.com/r/{{ docker_namespace }}/ubuntu"
   opensuse: "https://hub.docker.com/r/{{ docker_namespace }}/opensuse"
-  Kali: "https://hub.docker.com/r/{{ docker_namespace }}/kalilinux"
   kali: "https://hub.docker.com/r/{{ docker_namespace }}/kalilinux"
 
 # This maps the Galaxy distribution and version to Docker images.
@@ -41,24 +77,22 @@ distribution_version_mapping:
       - alpine-openrc_latest
   Amazon:
     all:
-      # - 1
       - amazonlinux2023
-      - amazonlinux1
     "2018.03":
-      - 1
-      - amazonlinux1
+      - amazonlinux_latest
     Candidate:
       - amazonlinux2023
-    amazonlinux1:
-      - amazonlinux1
+    "2":
+      - amazonlinux_latest
+    "2023":
+      - amazonlinux2023
   Archlinux:
     all:
-      - archlinux_latest
+      - archlinux
   Debian:
     all:
       - debian_latest  # 13 (trixie)
       - bookworm  # 12
-      - bullseye  # 11
     trixie:
       - debian_latest
     bullseye:
@@ -72,29 +106,26 @@ distribution_version_mapping:
       - 8
     "9":
       - latest
+    "10":
+      - latest
   Fedora:
     all:
       - fedora_latest
-      - fedora42
-      - fedora44
       - fedora45
     "42":
       - fedora42
     "43":
-      - fedora_latest
+      - fedora43
     "44":
       - fedora44
     "45":
       - fedora45
   Ubuntu:
     all:
-      - plucky
       - ubuntu_latest  # 24
       - jammy  # 22
     noble:
       - ubuntu_latest
-    lunar:
-      - lunar
     plucky:
       - plucky
     jammy:
@@ -102,12 +133,74 @@ distribution_version_mapping:
   opensuse:
     all:
       - opensuse-tumbleweed
+  SUSE:
+    all:
+      - opensuse-tumbleweed
+    tumbleweed:
+      - opensuse-tumbleweed
   Kali:
     all:
       - kalilinux
   kali:
     all:
       - kalilinux
+  RedHat:
+    all:
+      - rhel9
+    "9":
+      - rhel9
+  CentOS:
+    all:
+      - centos-stream9
+    "9":
+      - centos-stream9
+  OracleLinux:
+    all:
+      - oraclelinux9
+      - oraclelinux_latest
+    "8":
+      - oraclelinux8
+    "9":
+      - oraclelinux9
+      - oraclelinux_latest
+  Rocky:
+    all:
+      - rockylinux9
+    "8":
+      - rockylinux8
+    "9":
+      - rockylinux9
+  RockyLinux:
+    all:
+      - rockylinux9
+    "8":
+      - rockylinux8
+    "9":
+      - rockylinux9
+  AlmaLinux:
+    all:
+      - almalinux9
+      - almalinux10
+    "9":
+      - almalinux9
+      - almalinux9_latest
+    "10":
+      - almalinux10
+      - almalinux10_latest
+
+# Version aliases found in meta/main.yml or from Ansible fact naming.
+distribution_version_alias_mapping:
+  latest: all
+  stable: all
+  rolling: all
+  rawhide: rawhide
+  trixie: trixie
+  bookworm: bookworm
+  bullseye: bullseye
+  noble: noble
+  jammy: jammy
+  plucky: plucky
+  tumbleweed: tumbleweed
 
 # To schedule CI on different days of the month, this is a map that relates a letter to a day of the month.
 letter_day_mapping:
