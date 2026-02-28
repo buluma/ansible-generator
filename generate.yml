@@ -240,6 +240,14 @@
       when:
         - generate_gitlab_ci
 
+    - name: Render file .github/workflows/depandabot_merge.yml
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/depandabot_merge.yml.j2"
+        dest: "{{ role_path }}/.github/workflows/depandabot_merge.yml"
+        mode: "0644"
+      when:
+        - generate_github_dependabot_merger
+
     - name: Render file .github/workflows/requirements2png.yml
       ansible.builtin.template:
         src: "{{ playbook_dir }}/templates/requirements2png.yml.j2"

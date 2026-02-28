@@ -11,16 +11,12 @@ permissions:
   contents: write
   pull-requests: write
 
-concurrency:
-  group: ${% raw %}{{ github.ref }}-${{ github.workflow }}{% endraw %}
-
-  cancel-in-progress: true
-
-
 jobs:
   dependabot_merge:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@master"
-      - name: Dependabot Auto Merge Action
-        uses: buluma/dependabot-auto-merge-action@v2.1.2
+      - name: Auto Merge Dependabot Updates
+        uses: "buluma/gh-action-auto-merge-dependabot-updates@master"
+        with:
+          allowed-actors: dependabot-preview[bot], dependabot[bot]
