@@ -8,10 +8,14 @@ on:
     branches:
       - master
       - main
+      - codex
+      - testing
   pull_request:
     branches:
       - master
       - main
+      - codex
+      - testing
   schedule:
     - cron: '{{ letter_minute_mapping[role_name[0]] }} {{ letter_hour_mapping[role_name[0]] }} {{ letter_day_mapping[role_name[0]] }} * *'
 
@@ -29,7 +33,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v6
       - name: ansible-lint
-        uses: ansible/ansible-lint@v26.2.0
+        uses: ansible/ansible-lint@v26.4.0
 
   molecule:
     needs:
@@ -39,37 +43,14 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-{% set matrix = namespace(seen=[]) %}
 {% for platform in meta.galaxy_info.platforms %}
-{% set platform_key = platform_name_alias_mapping.get(platform.name, platform.name) %}
-{% set image = platform_image_mapping.get(platform_key, default_matrix_image) %}
-{% set version_map = distribution_version_mapping.get(platform_key, {}) %}
-{% set fallback_tags = version_map.get('all', [default_matrix_tag]) %}
 {% for version in platform.versions %}
-{% set version_key = distribution_version_alias_mapping.get(version | string, version | string) %}
-{% set tags = version_map.get(version_key, fallback_tags) %}
-{% for tag in tags %}
-{% set matrix_key = image ~ '|' ~ tag %}
-{% if matrix_key not in matrix.seen %}
-          - image: "{{ image }}"
+{% for tag in distribution_version_mapping[platform.name][version] %}
+          - image: "{{ platform_image_mapping[platform.name] }}"
             tag: "{{ tag }}"
-{% set _ = matrix.seen.append(matrix_key) %}
-{% endif %}
 {% endfor %}
 {% endfor %}
 {% endfor %}
-{% if molecule_matrix_include is defined %}
-{% for item in molecule_matrix_include %}
-{% set image = item.image | default(default_matrix_image) %}
-{% set tag = item.tag | default(default_matrix_tag) %}
-{% set matrix_key = image ~ '|' ~ tag %}
-{% if matrix_key not in matrix.seen %}
-          - image: "{{ image }}"
-            tag: "{{ tag }}"
-{% set _ = matrix.seen.append(matrix_key) %}
-{% endif %}
-{% endfor %}
-{% endif %}
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -93,7 +74,7 @@ jobs:
           sudo systemctl restart docker || true
 
       - name: Install Docker
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Install dependencies
         run: |

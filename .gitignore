@@ -13,3 +13,8 @@
 
 # Project specific
 clone_repos.py
+templates/molecule-action.yml.j2.bak
+templates/molecule-action.yml.j2.bak
+generate.yml.bak
+defaults/main.yml.bak
+templates/molecule-action.yml.j2.bak

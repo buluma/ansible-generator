@@ -1,0 +1,62 @@
+---
+
+# Settings to Docker containers.
+docker_namespace: buluma
+docker_image: fedora
+docker_tag: latest
+
+# Your username on Galaxy.
+galaxy_namespace: buluma
+
+# Your username/organization name on GitHub.
+github_namespace: buluma
+
+# Your username/group on GitLab.
+gitlab_namespace: shadowwalker
+
+# Your name and optionally email-address.
+author: Shadow Walker (bulumaknight@gmail.com)
+
+# The full URL to your website.
+author_website: "https://buluma.github.io/"
+
+# The container to use for GitLab CI.
+gitlab_container: "buluma/github-action-molecule:5.1.1"
+
+# The molecule action to use.
+molecule_action: "buluma/molecule-action@v25.6.14"
+
+# Would you like to add a sponsor message?
+sponsored_message: no
+
+# A custom message can be placed with this content.
+custom_message: "Also see a [full explanation and example](https://buluma.github.io/how-to-use-these-roles.html) on how to use these roles."
+
+# The below settings determine what the generator will generate.
+generate_gitignore: yes
+generate_yamllint: yes
+generate_pre_commit: yes
+generate_readme: yes
+generate_ansible_lint: no
+generate_tox: no
+generate_github_settings: yes
+generate_license: yes
+generate_security: yes
+generate_molecule: yes
+generate_contributing: yes
+generate_code_of_conduct: yes
+generate_github_dependabot_merger: yes
+generate_github_action_molecule: yes
+generate_github_action_pre_commit: no
+generate_github_action_galaxy: yes
+generate_github_action_todo: no
+generate_github_release_drafter: yes
+generate_github_release_config: yes
+generate_gitlab_ci: no
+generate_requirements_txt: yes
+generate_requirements2png: yes
+generate_github_funding: no
+generate_github_issue_template: yes
+generate_github_feature_template: yes
+generate_install_pre_commit: yes
+git_push: yes
