@@ -1,10 +1,11 @@
 ---
+name: yamllint
 
-name: 'yamllint'
 on:
   push:
+
 concurrency:
-  group: ${{ github.workflow }}-${{ github.runId }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -12,5 +13,12 @@ jobs:
     name: yamllint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: karancode/yamllint-github-action@master
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install yamllint
+        run: pip install yamllint
+      - name: Run yamllint
+        run: yamllint -c .yamllint .

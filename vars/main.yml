@@ -3,7 +3,6 @@
 
 # A list of python version to test.
 default_python_version:
-  - "python:3.9"
   - "python:3.10"
   - "python:3.13"
 
@@ -47,11 +46,8 @@ distribution_version_mapping:
     all:
       - latest  # 13 (trixie)
       - bookworm  # 12
-      - bullseye  # 11
     trixie:
       - latest
-    bullseye:
-      - bullseye
     bookworm:
       - bookworm
   EL:
@@ -63,12 +59,6 @@ distribution_version_mapping:
     all:
       # - 41  # This is a broken image.
       - latest
-    "38":
-      - 38
-    "39":
-      - 39
-    "40":
-      - 40
     "41": []
       # - 41  # This is a broken image.
     "42":

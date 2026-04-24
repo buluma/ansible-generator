@@ -1,10 +1,11 @@
 ---
+name: shellcheck
 
-name: 'shellcheck'
 on:
   push:
+
 concurrency:
-  group: ${{ github.workflow }}-${{ github.runId }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -12,5 +13,5 @@ jobs:
     name: shellcheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: ludeeus/action-shellcheck@master
+      - uses: actions/checkout@v4
+      - uses: ludeeus/action-shellcheck@2.0.0
