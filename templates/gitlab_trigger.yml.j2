@@ -30,7 +30,7 @@ jobs:
           channel: "#ansible"
           message: Starting {{ github_namespace }}.{{ role_name }} GitLab Trigger...
         if: always()
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Mirror + trigger CI
         uses: buluma/gitlab-mirror-ci-action@1.0.7
         with:

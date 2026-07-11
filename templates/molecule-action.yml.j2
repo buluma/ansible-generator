@@ -31,9 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: ansible-lint
-        uses: ansible/ansible-lint@v26.4.0
+        uses: ansible/ansible-lint@v26.6.0
 
   molecule:
     needs:
@@ -53,7 +53,7 @@ jobs:
 {% endfor %}
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: ansible-role-{{ role_name }}
 
