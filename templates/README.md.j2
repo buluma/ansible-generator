@@ -73,7 +73,7 @@ This role has been tested on these [container images](https://hub.docker.com/u/{
 
 |container|tags|
 |---------|----|
-{% for platform in meta.galaxy_info.platforms %}
+{% for platform in platforms %}
 |[{{ platform.name }}]({{ image_docker_hub_url_mapping[platform.name | lower] }})|{% for version in platform.versions %}{{ version }}{% if not loop.last %}, {% endif %}{% endfor %}|
 {% endfor %}
 

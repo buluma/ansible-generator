@@ -20,7 +20,7 @@ molecule:
   parallel:
     matrix:
 {% set matrix = namespace(seen=[]) %}
-{% for platform in meta.galaxy_info.platforms %}
+{% for platform in platforms %}
 {% set platform_key = platform_name_alias_mapping.get(platform.name, platform.name) %}
 {% set image = platform_image_mapping.get(platform_key, default_matrix_image) %}
 {% set version_map = distribution_version_mapping.get(platform_key, {}) %}

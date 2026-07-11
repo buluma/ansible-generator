@@ -36,6 +36,14 @@
       when:
         - preferencesymlstat.stat.exists
 
+    - name: Set platforms fact
+      # galaxy_info.platforms in meta/main.yml is rejected by ansible-lint's
+      # current schema, so it no longer lives there. A role can declare its
+      # own `platforms:` in meta/preferences.yml (same shape as the old
+      # galaxy_info.platforms list) to override the generator's default set.
+      ansible.builtin.set_fact:
+        platforms: "{{ platforms | default(default_platforms) }}"
+
     - name: Check defaults/main.yml
       ansible.builtin.stat:
         path: "{{ role_path }}/defaults/main.yml"

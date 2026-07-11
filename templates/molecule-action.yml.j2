@@ -43,7 +43,7 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-{% for platform in meta.galaxy_info.platforms %}
+{% for platform in platforms %}
 {% for version in platform.versions %}
 {% for tag in distribution_version_mapping[platform.name][version] %}
           - image: "{{ platform_image_mapping[platform.name] }}"
