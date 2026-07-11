@@ -28,12 +28,15 @@ default_platforms:
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.name` to a name of a container.
 platform_image_mapping:
   Alpine: alpine
+  AlmaLinux: docker-molecule-images
   Amazon: amazonlinux
   Archlinux: archlinux
   Debian: docker-molecule-images
-  EL: enterpriselinux
+  EL: docker-molecule-images
   Fedora: docker-molecule-images
   opensuse: opensuse
+  OracleLinux: docker-molecule-images
+  Rocky: docker-molecule-images
   Ubuntu: docker-molecule-images
 
 # A map that relates a container name to the URL of that container on Docker Hub.
@@ -42,10 +45,14 @@ image_docker_hub_url_mapping:
   amazon: "https://hub.docker.com/r/{{ docker_namespace }}/amazonlinux"
   archlinux: "https://hub.docker.com/r/{{ docker_namespace }}/archlinux"
   debian: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
-  el: "https://hub.docker.com/r/{{ docker_namespace }}/enterpriselinux"
+  el: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   fedora: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   opensuse: "https://hub.docker.com/r/{{ docker_namespace }}/opensuse"
   ubuntu: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  almalinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  rockylinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  oraclelinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  rhel-ubi: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
 
 # This maps the Galaxy distribution and version to Docker images.
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.versions` to the tag of the Docker container.
@@ -53,32 +60,53 @@ distribution_version_mapping:
   Alpine:
     all:
       - latest
+  AlmaLinux:
+    all:
+      - almalinux10  # 10
+      - almalinux9   # 9
+      - almalinux8   # 8
+    "10":
+      - almalinux10
+    "9":
+      - almalinux9
+    "8":
+      - almalinux8
   Amazon:
     all:
-      - latest
-    Candidate:
-      - latest
+      - amazonlinux2023
+      - amazonlinux2
+    "2023":
+      - amazonlinux2023
+    "2":
+      - amazonlinux2
   Archlinux:
     all:
       - latest
   Debian:
     all:
       - debian13  # 13 (trixie)
-      - debian12  # 12
+      - debian12  # 12 (bookworm)
+      - debian11  # 11 (bullseye)
     trixie:
       - debian13
     bookworm:
       - debian12
+    bullseye:
+      - debian11
   EL:
     all:
-      - latest
+      - rhel9
+      - rhel8-ubi
     "9":
-      - latest
+      - rhel9
+    "8":
+      - rhel8-ubi
   Fedora:
     all:
+      - fedora45
       - fedora44
-    "41":
-      - fedora41
+      - fedora43
+      - fedora42
     "42":
       - fedora42
     "43":
@@ -87,12 +115,37 @@ distribution_version_mapping:
       - fedora44
     "45":
       - fedora45
+  openSUSE:
+    all:
+      - opensuse156  # 15.6
+      - opensuse-tumbleweed
+    "15.6":
+      - opensuse156
+    tumbleweed:
+      - opensuse-tumbleweed
+  OracleLinux:
+    all:
+      - oraclelinux9
+      - oraclelinux8
+    "9":
+      - oraclelinux9
+    "8":
+      - oraclelinux8
+  Rocky:
+    all:
+      - rockylinux9
+    "9":
+      - rockylinux9
   Ubuntu:
     all:
       - ubuntu2604  # 26 (resolute)
       - ubuntu2404  # 24 (noble)
+      - ubuntu2504  # 25 (plucky)
+      - ubuntu2204  # 22 (jammy)
     resolute:
       - ubuntu2604
+    plucky:
+      - ubuntu2504
     noble:
       - ubuntu2404
     jammy:
