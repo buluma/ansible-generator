@@ -14,7 +14,7 @@ driver:
 platforms:
   - name: "{{ role_name | regex_replace('_', '') }}-${image:-{{ docker_image }}}-${tag:-{{ docker_tag }}}"
     image: "${namespace:-{{ docker_namespace }}}/${image:-{{ docker_image }}}:${tag:-{{ docker_tag }}}"
-    command: /sbin/init
+    command: /lib/systemd/systemd
     cgroupns_mode: host
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
