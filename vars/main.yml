@@ -6,27 +6,46 @@ default_python_version:
   - "python:3.10"
   - "python:3.13"
 
+# The platform/version matrix used to generate CI when a role doesn't define
+# its own list in meta/preferences.yml. `galaxy_info.platforms` in
+# meta/main.yml is deprecated by ansible-lint's schema (see the 2026-06-24
+# "Fix lint schema error by removing platforms metadata" commits across
+# every role), so this can no longer live there.
+default_platforms:
+  - name: EL
+    versions:
+      - all
+  - name: Debian
+    versions:
+      - all
+  - name: Fedora
+    versions:
+      - all
+  - name: Ubuntu
+    versions:
+      - all
+
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.name` to a name of a container.
 platform_image_mapping:
   Alpine: alpine
   Amazon: amazonlinux
   Archlinux: archlinux
-  Debian: debian
+  Debian: docker-molecule-images
   EL: enterpriselinux
-  Fedora: fedora
+  Fedora: docker-molecule-images
   opensuse: opensuse
-  Ubuntu: ubuntu
+  Ubuntu: docker-molecule-images
 
 # A map that relates a container name to the URL of that container on Docker Hub.
 image_docker_hub_url_mapping:
   alpine: "https://hub.docker.com/r/{{ docker_namespace }}/alpine"
   amazon: "https://hub.docker.com/r/{{ docker_namespace }}/amazonlinux"
   archlinux: "https://hub.docker.com/r/{{ docker_namespace }}/archlinux"
-  debian: "https://hub.docker.com/r/{{ docker_namespace }}/debian"
+  debian: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   el: "https://hub.docker.com/r/{{ docker_namespace }}/enterpriselinux"
-  fedora: "https://hub.docker.com/r/{{ docker_namespace }}/fedora"
+  fedora: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   opensuse: "https://hub.docker.com/r/{{ docker_namespace }}/opensuse"
-  ubuntu: "https://hub.docker.com/r/{{ docker_namespace }}/ubuntu"
+  ubuntu: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
 
 # This maps the Galaxy distribution and version to Docker images.
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.versions` to the tag of the Docker container.
@@ -44,12 +63,12 @@ distribution_version_mapping:
       - latest
   Debian:
     all:
-      - latest  # 13 (trixie)
-      - bookworm  # 12
+      - debian13  # 13 (trixie)
+      - debian12  # 12
     trixie:
-      - latest
+      - debian13
     bookworm:
-      - bookworm
+      - debian12
   EL:
     all:
       - latest
@@ -57,22 +76,27 @@ distribution_version_mapping:
       - latest
   Fedora:
     all:
-      # - 41  # This is a broken image.
-      - latest
-    "41": []
-      # - 41  # This is a broken image.
+      - fedora44
+    "41":
+      - fedora41
     "42":
-      - latest
+      - fedora42
     "43":
-      - rawhide
+      - fedora43
+    "44":
+      - fedora44
+    "45":
+      - fedora45
   Ubuntu:
     all:
-      - latest  # 24
-      - jammy  # 22
+      - ubuntu2604  # 26 (resolute)
+      - ubuntu2404  # 24 (noble)
+    resolute:
+      - ubuntu2604
     noble:
-      - latest
+      - ubuntu2404
     jammy:
-      - jammy
+      - ubuntu2204
 
 # To schedule CI on different days of the month, this is a map that relates a letter to a day of the month.
 letter_day_mapping:
