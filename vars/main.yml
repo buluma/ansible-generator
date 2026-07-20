@@ -11,6 +11,9 @@ default_python_version:
 # meta/main.yml is deprecated by ansible-lint's schema (see the 2026-06-24
 # "Fix lint schema error by removing platforms metadata" commits across
 # every role), so this can no longer live there.
+#
+# Version support policy: test only the latest 3 releases per distro.
+# If a distro has fewer than 3 releases, support all of them.
 default_platforms:
   - name: EL
     versions:
@@ -34,10 +37,14 @@ platform_image_mapping:
   Debian: docker-molecule-images
   EL: docker-molecule-images
   Fedora: docker-molecule-images
-  opensuse: opensuse
+  Kali: docker-molecule-images
+  openSUSE: opensuse
   OracleLinux: docker-molecule-images
   Rocky: docker-molecule-images
+  SLES: docker-molecule-images
   Ubuntu: docker-molecule-images
+  Rockylinux: docker-molecule-images
+  Almalinux: docker-molecule-images
 
 # A map that relates a container name to the URL of that container on Docker Hub.
 image_docker_hub_url_mapping:
@@ -47,15 +54,21 @@ image_docker_hub_url_mapping:
   debian: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   el: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   fedora: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  kali: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   opensuse: "https://hub.docker.com/r/{{ docker_namespace }}/opensuse"
   ubuntu: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   almalinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   rockylinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   oraclelinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   rhel-ubi: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  sles: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
 
 # This maps the Galaxy distribution and version to Docker images.
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.versions` to the tag of the Docker container.
+#
+# Version support policy: for each distro, list only the latest 3 releases
+# under `all:`. If fewer than 3 releases exist, list all of them. When a
+# role specifies a concrete version, resolve it to the corresponding tag(s).
 distribution_version_mapping:
   Alpine:
     all:
@@ -74,11 +87,8 @@ distribution_version_mapping:
   Amazon:
     all:
       - amazonlinux2023
-      - amazonlinux2
     "2023":
       - amazonlinux2023
-    "2":
-      - amazonlinux2
   Archlinux:
     all:
       - latest
@@ -95,32 +105,36 @@ distribution_version_mapping:
       - debian11
   EL:
     all:
-      - rhel9
-      - rhel8-ubi
+      - rockylinux9
+      - almalinux9
+      - rockylinux8
+      - almalinux8
     "9":
-      - rhel9
+      - rockylinux9
+      - almalinux9
     "8":
-      - rhel8-ubi
+      - rockylinux8
+      - almalinux8
   Fedora:
     all:
       - fedora45
       - fedora44
       - fedora43
-      - fedora42
-    "42":
-      - fedora42
     "43":
       - fedora43
     "44":
       - fedora44
     "45":
       - fedora45
+  Kali:
+    all:
+      - kalilinux
   openSUSE:
     all:
-      - opensuse156  # 15.6
+      - opensuse  # 16.0 (Leap)
       - opensuse-tumbleweed
-    "15.6":
-      - opensuse156
+    "16.0":
+      - opensuse
     tumbleweed:
       - opensuse-tumbleweed
   OracleLinux:
@@ -133,19 +147,30 @@ distribution_version_mapping:
       - oraclelinux8
   Rocky:
     all:
+      - rockylinux10
       - rockylinux9
+      - rockylinux8
+    "8":
+      - rockylinux8
     "9":
       - rockylinux9
+    "10":
+      - rockylinux10
+  SLES:
+    all:
+      - sles15
+      - sles12
+    "15":
+      - sles15
+    "12":
+      - sles12
   Ubuntu:
     all:
       - ubuntu2604  # 26 (resolute)
       - ubuntu2404  # 24 (noble)
-      - ubuntu2504  # 25 (plucky)
       - ubuntu2204  # 22 (jammy)
     resolute:
       - ubuntu2604
-    plucky:
-      - ubuntu2504
     noble:
       - ubuntu2404
     jammy:
