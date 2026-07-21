@@ -109,7 +109,6 @@ distribution_version_mapping:
       - almalinux10
       - rockylinux9
       - almalinux9
-      - rockylinux8
       - almalinux8
     "10":
       - rockylinux10
@@ -118,7 +117,6 @@ distribution_version_mapping:
       - rockylinux9
       - almalinux9
     "8":
-      - rockylinux8
       - almalinux8
   Fedora:
     all:
@@ -157,9 +155,6 @@ distribution_version_mapping:
     all:
       - rockylinux10
       - rockylinux9
-      - rockylinux8
-    "8":
-      - rockylinux8
     "9":
       - rockylinux9
     "10":
