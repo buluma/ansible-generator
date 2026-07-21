@@ -77,13 +77,10 @@ distribution_version_mapping:
     all:
       - almalinux10  # 10
       - almalinux9   # 9
-      - almalinux8   # 8
     "10":
       - almalinux10
     "9":
       - almalinux9
-    "8":
-      - almalinux8
   Amazon:
     all:
       - amazonlinux2023
@@ -109,15 +106,12 @@ distribution_version_mapping:
       - almalinux10
       - rockylinux9
       - almalinux9
-      - almalinux8
     "10":
       - rockylinux10
       - almalinux10
     "9":
       - rockylinux9
       - almalinux9
-    "8":
-      - almalinux8
   Fedora:
     all:
       - fedora45
