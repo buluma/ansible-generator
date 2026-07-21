@@ -30,15 +30,15 @@ default_platforms:
 
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.name` to a name of a container.
 platform_image_mapping:
-  Alpine: alpine
+  Alpine: docker-molecule-images
   AlmaLinux: docker-molecule-images
-  Amazon: amazonlinux
-  Archlinux: archlinux
+  Amazon: docker-molecule-images
+  Archlinux: docker-molecule-images
   Debian: docker-molecule-images
   EL: docker-molecule-images
   Fedora: docker-molecule-images
   Kali: docker-molecule-images
-  openSUSE: opensuse
+  openSUSE: docker-molecule-images
   OracleLinux: docker-molecule-images
   Rocky: docker-molecule-images
   SLES: docker-molecule-images
@@ -48,14 +48,14 @@ platform_image_mapping:
 
 # A map that relates a container name to the URL of that container on Docker Hub.
 image_docker_hub_url_mapping:
-  alpine: "https://hub.docker.com/r/{{ docker_namespace }}/alpine"
-  amazon: "https://hub.docker.com/r/{{ docker_namespace }}/amazonlinux"
-  archlinux: "https://hub.docker.com/r/{{ docker_namespace }}/archlinux"
+  alpine: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  amazon: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  archlinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   debian: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   el: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   fedora: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   kali: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
-  opensuse: "https://hub.docker.com/r/{{ docker_namespace }}/opensuse"
+  opensuse: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   ubuntu: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   almalinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   rockylinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
@@ -105,10 +105,15 @@ distribution_version_mapping:
       - debian11
   EL:
     all:
+      - rockylinux10
+      - almalinux10
       - rockylinux9
       - almalinux9
       - rockylinux8
       - almalinux8
+    "10":
+      - rockylinux10
+      - almalinux10
     "9":
       - rockylinux9
       - almalinux9
@@ -139,8 +144,11 @@ distribution_version_mapping:
       - opensuse-tumbleweed
   OracleLinux:
     all:
+      - oraclelinux10
       - oraclelinux9
       - oraclelinux8
+    "10":
+      - oraclelinux10
     "9":
       - oraclelinux9
     "8":
