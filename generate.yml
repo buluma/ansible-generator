@@ -44,6 +44,31 @@
       ansible.builtin.set_fact:
         platforms: "{{ platforms | default(default_platforms) }}"
 
+    - name: Validate platform mappings
+      ansible.builtin.assert:
+        that:
+          - item.name is defined
+          - item.versions is defined
+          - item.name in platform_image_mapping
+          - (item.name | lower) in image_docker_hub_url_mapping
+          - item.name in distribution_version_mapping
+          - >-
+            item.versions
+            | difference(distribution_version_mapping.get(item.name, {}) | list)
+            | length == 0
+        fail_msg: >-
+          Unsupported platform configuration for
+          {{ item.name | default('<missing name>') }}.
+          Each platform requires entries in platform_image_mapping,
+          image_docker_hub_url_mapping, and distribution_version_mapping;
+          every declared version must be present in its distribution mapping.
+          Declared versions: {{ item.versions | default([]) }};
+          supported versions:
+          {{ distribution_version_mapping.get(item.name | default(''), {}) | list }}.
+      loop: "{{ platforms }}"
+      loop_control:
+        label: "{{ item.name | default('<missing name>') }}"
+
     - name: Check defaults/main.yml
       ansible.builtin.stat:
         path: "{{ role_path }}/defaults/main.yml"
