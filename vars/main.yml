@@ -91,7 +91,10 @@ distribution_version_mapping:
     all:
       - debian13  # 13 (trixie)
       - debian12  # 12 (bookworm)
-      - debian11  # 11 (bullseye)
+      # debian11 (bullseye) dropped from `all` per version support policy
+      # (latest 3 -> now 12/13 only); several roles already pinned this
+      # exclusion individually (see e.g.
+      # ansible-role-netdata/meta/preferences.yml).
     trixie:
       - debian13
     bookworm:
