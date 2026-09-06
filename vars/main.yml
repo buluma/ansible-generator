@@ -100,6 +100,15 @@ distribution_version_mapping:
       - debian12
     bullseye:
       - debian11
+    # Release-number aliases of the codenames above - some roles pin
+    # meta/preferences.yml versions by number instead of codename, and
+    # dropping these breaks generation for them (dict has no attribute).
+    "13":
+      - debian13
+    "12":
+      - debian12
+    "11":
+      - debian11
   EL:
     all:
       - rockylinux10
@@ -172,6 +181,25 @@ distribution_version_mapping:
       - ubuntu2404
     jammy:
       - ubuntu2204
+    focal:
+      - ubuntu2004
+    bionic:
+      - ubuntu1804
+    # Release-number aliases of the codenames above - some roles pin
+    # meta/preferences.yml versions by number instead of codename, and
+    # dropping these breaks generation for them (dict has no attribute).
+    # focal/bionic are outside the "latest 3" policy but still valid
+    # explicit pins - some roles need an old LTS deliberately.
+    "26.04":
+      - ubuntu2604
+    "24.04":
+      - ubuntu2404
+    "22.04":
+      - ubuntu2204
+    "20.04":
+      - ubuntu2004
+    "18.04":
+      - ubuntu1804
 
 # To schedule CI on different days of the month, this is a map that relates a letter to a day of the month.
 letter_day_mapping:
