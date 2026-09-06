@@ -41,7 +41,6 @@ platform_image_mapping:
   openSUSE: docker-molecule-images
   OracleLinux: docker-molecule-images
   Rocky: docker-molecule-images
-  SLES: docker-molecule-images
   Ubuntu: docker-molecule-images
   Rockylinux: docker-molecule-images
   Almalinux: docker-molecule-images
@@ -61,7 +60,6 @@ image_docker_hub_url_mapping:
   rockylinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   oraclelinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   rhel-ubi: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
-  sles: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
 
 # This maps the Galaxy distribution and version to Docker images.
 # A map that relates the `meta/main.yml` - `galaxy_info.platforms.versions` to the tag of the Docker container.
@@ -72,7 +70,7 @@ image_docker_hub_url_mapping:
 distribution_version_mapping:
   Alpine:
     all:
-      - latest
+      - alpine-openrc
   AlmaLinux:
     all:
       - almalinux10  # 10
@@ -88,7 +86,7 @@ distribution_version_mapping:
       - amazonlinux2023
   Archlinux:
     all:
-      - latest
+      - archlinux
   Debian:
     all:
       - debian13  # 13 (trixie)
@@ -122,16 +120,20 @@ distribution_version_mapping:
       - rockylinux9
       - almalinux9
   Fedora:
+    # fedora45 isn't a released version yet (Fedora ships ~Oct 2026; today's
+    # "fedora45" tag tracks Rawhide, which shipped Python 3.15.0b3 and broke
+    # ansible-core's AnsiballZ wrapper - see ansible-role-bootstrap/sudo's
+    # preferences.yml, which already exclude it for this reason).
     all:
-      - fedora45
       - fedora44
       - fedora43
+      - fedora42
+    "42":
+      - fedora42
     "43":
       - fedora43
     "44":
       - fedora44
-    "45":
-      - fedora45
   Kali:
     all:
       - kalilinux
@@ -162,14 +164,10 @@ distribution_version_mapping:
       - rockylinux9
     "10":
       - rockylinux10
-  SLES:
-    all:
-      - sles15
-      - sles12
-    "15":
-      - sles15
-    "12":
-      - sles12
+  # SLES intentionally omitted: sles12/sles15 in docker-molecule-images
+  # require a paid SUSE subscription to pull the base image (see that
+  # repo's sles12/README.md) - CI on this platform can never go green
+  # without credentials this project doesn't have.
   Ubuntu:
     all:
       - ubuntu2604  # 26 (resolute)
