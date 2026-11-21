@@ -75,10 +75,13 @@ distribution_version_mapping:
     all:
       - almalinux10  # 10
       - almalinux9   # 9
+      - almalinux8   # 8
     "10":
       - almalinux10
     "9":
       - almalinux9
+    "8":
+      - almalinux8
   Amazon:
     all:
       - amazonlinux2023
@@ -116,21 +119,24 @@ distribution_version_mapping:
       - almalinux10
       - rockylinux9
       - almalinux9
+      - rockylinux8
+      - almalinux8
     "10":
       - rockylinux10
       - almalinux10
     "9":
       - rockylinux9
       - almalinux9
+    "8":
+      - rockylinux8
+      - almalinux8
   Fedora:
-    # fedora45 isn't a released version yet (Fedora ships ~Oct 2026; today's
-    # "fedora45" tag tracks Rawhide, which shipped Python 3.15.0b3 and broke
-    # ansible-core's AnsiballZ wrapper - see ansible-role-bootstrap/sudo's
-    # preferences.yml, which already exclude it for this reason).
     all:
+      - fedora45
       - fedora44
       - fedora43
-      - fedora42
+    "45":
+      - fedora45
     "42":
       - fedora42
     "43":
@@ -163,6 +169,9 @@ distribution_version_mapping:
     all:
       - rockylinux10
       - rockylinux9
+      - rockylinux8
+    "8":
+      - rockylinux8
     "9":
       - rockylinux9
     "10":
