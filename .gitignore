@@ -14,9 +14,3 @@
 # AI agent state
 .claude
 .gemini-tasks
-
-# Project specific
-clone_repos.py
-templates/molecule-action.yml.j2.bak
-generate.yml.bak
-defaults/main.yml.bak
