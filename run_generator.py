@@ -1,27 +1,60 @@
-import os
+import json
+from pathlib import Path
 import subprocess
 
-# The directory where the cloned repositories are located.
-CLONE_DIR = "../ansible-roles"
 
-# The path to the generate.yml playbook.
-PLAYBOOK_PATH = os.path.abspath("generate.yml")
+SCRIPT_DIR = Path(__file__).resolve().parent
+CLONE_DIR = SCRIPT_DIR.parent / "ansible-roles"
+PLAYBOOK_PATH = SCRIPT_DIR / "generate.yml"
+
 
 def run_generator():
-    """
-    Run the generate.yml playbook against each repository in the CLONE_DIR.
-    """
-    if not os.path.exists(CLONE_DIR):
+    """Generate files for each active role checkout and report failed roles."""
+    try:
+        roles = sorted(
+            role for role in CLONE_DIR.iterdir()
+            if role.name.startswith("ansible-role-")
+            and role.is_dir() and not role.is_symlink()
+            and (role / ".git").exists() and (role / "meta/main.yml").is_file()
+        )
+    except FileNotFoundError:
         print(f"The directory {CLONE_DIR} does not exist. Please run clone_repos.py first.")
-        return
+        return 1
+    except OSError as error:
+        print(f"Could not read {CLONE_DIR}: {error}")
+        return 1
 
-    for repo_name in os.listdir(CLONE_DIR):
-        repo_path = os.path.join(CLONE_DIR, repo_name)
-        if os.path.isdir(repo_path):
-            print(f"Running generator on {repo_name}...")
-            # The playbook needs to be run from within the role's directory.
-            subprocess.run(["ansible-playbook", PLAYBOOK_PATH, "--extra-vars", f"generator_path={os.path.dirname(PLAYBOOK_PATH)}"], cwd=repo_path, check=True)
+    if not roles:
+        print(f"No active role checkouts found in {CLONE_DIR}.")
+        return 0
+
+    failed = []
+    for role in roles:
+        print(f"Running generator on {role.name}...", flush=True)
+        try:
+            subprocess.run(
+                [
+                    "ansible-playbook", str(PLAYBOOK_PATH), "--extra-vars",
+                    json.dumps({"role_path": str(role)}),
+                ],
+                cwd=role,
+                check=True,
+                timeout=300,
+            )
+        except FileNotFoundError as error:
+            print(f"Could not start ansible-playbook for {role.name}: {error}")
+            return 1
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError) as error:
+            print(f"Generation failed for {role.name}: {error}")
+            failed.append(role.name)
+
+    if failed:
+        print(f"Failed roles: {', '.join(failed)}")
+        return 1
+
+    print(f"Generated files for {len(roles)} roles.")
+    return 0
+
 
 if __name__ == "__main__":
-    run_generator()
-    print("Done.")
+    raise SystemExit(run_generator())

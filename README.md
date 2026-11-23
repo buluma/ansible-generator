@@ -36,6 +36,10 @@ cd ansible-role-my_role
 ../path/to/generate.yml
 ```
 
+The generator writes files in the target role and can overwrite existing files. Review the diff after running it. Pass `--extra-vars '{"generate_pre_commit": false}'` to skip writing the pre-commit configuration and installing its Git hook.
+
+To generate files across the sibling `ansible-roles` directory, run `python run_generator.py`. The runner selects `ansible-role-*` checkouts with `meta/main.yml`, skips archived checkouts and other directories, and exits nonzero if generation fails for any role.
+
 ## Configuration
 
 In `defaults/main.yml` you can change these variable to customize the output.
@@ -73,6 +77,8 @@ This (optional) file describes how Molecule should behave.
 |parameter               |type           |default|description                                                                                                                                              |
 |------------------------|---------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
 |github_variables_mapping|list           |not set|A list of `name` and `variable`, `name` refers to the GitHub exposed name, `variable` refers to the name you'd like to pass to molecule Ansible.|
+
+Mapped values are available in the Molecule step's environment and inherited by Ansible.
 
 ## Example
 

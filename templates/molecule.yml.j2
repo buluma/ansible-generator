@@ -22,12 +22,6 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
-{% if github_variables_mapping is defined %}
-  env:
-{% for item in github_variables_mapping %}
-    {{ item.variable }}: "{% raw %}${{% endraw %}{{ item.variable }}{% raw %}}{% endraw %}"
-{% endfor %}
-{% endif %}
 {% if verify.stat.exists  %}
 verifier:
   name: ansible

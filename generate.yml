@@ -11,10 +11,13 @@
     - vars/main.yml
 
   tasks:
-    - name: Set role_path and role_name
+    - name: Set role path
       ansible.builtin.set_fact:
         role_path: "{{ lookup('env', 'PWD') }}"
-        role_name: "{{ lookup('env', 'PWD') | basename | regex_replace('ansible-role-') }}"
+
+    - name: Set role name from role path
+      ansible.builtin.set_fact:
+        role_name: "{{ role_path | basename | regex_replace('ansible-role-') }}"
 
     - name: Load generators defaults/main.yml
       ansible.builtin.include_vars:
@@ -68,6 +71,19 @@
       loop: "{{ platforms }}"
       loop_control:
         label: "{{ item.name | default('<missing name>') }}"
+
+    - name: Resolve Molecule image and tag pairs for CI
+      ansible.builtin.set_fact:
+        molecule_platform_matrix: >-
+          {{ molecule_platform_matrix | default([]) +
+             ([platform_image_mapping[platform_name]] | product(image_tags) | map('list') | list) }}
+      vars:
+        platform_name: "{{ item.0.name }}"
+        image_tags: "{{ distribution_version_mapping[platform_name][item.1] }}"
+      loop: "{{ platforms | subelements('versions') }}"
+      loop_control:
+        label: "{{ item.0.name }} {{ item.1 }}"
+      when: (generate_github_action_molecule | bool) or (generate_gitlab_ci | bool)
 
     - name: Check defaults/main.yml
       ansible.builtin.stat:
@@ -132,13 +148,14 @@
         - .github/workflows
         - .github/ISSUE_TEMPLATE
       when:
-        - generate_github_settings or
-          generate_github_action_molecule or
-          generate_github_action_galaxy or
-          generate_github_action_todo or
-          generate_github_funding or
-          generate_github_issue_template or
-          generate_github_feature_template
+        - (generate_github_settings | bool) or
+          (generate_github_action_molecule | bool) or
+          (generate_github_action_galaxy | bool) or
+          (generate_github_action_todo | bool) or
+          (generate_github_funding | bool) or
+          (generate_github_issue_template | bool) or
+          (generate_github_feature_template | bool) or
+          (generate_requirements2png | bool)
 
     - name: Create directories
       ansible.builtin.file:
@@ -182,7 +199,7 @@
         dest: "{{ role_path }}/README.md"
         mode: "0644"
       when:
-        - generate_readme
+        - generate_readme | bool
 
     - name: Render file .ansible-lint
       ansible.builtin.template:
@@ -190,7 +207,7 @@
         dest: "{{ role_path }}/.ansible-lint"
         mode: "0644"
       when:
-        - generate_ansible_lint
+        - generate_ansible_lint | bool
 
     - name: Render file .github/settings.yml
       ansible.builtin.template:
@@ -198,7 +215,7 @@
         dest: "{{ role_path }}/.github/settings.yml"
         mode: "0644"
       when:
-        - generate_github_settings
+        - generate_github_settings | bool
 
     - name: Render file LICENSE
       ansible.builtin.template:
@@ -206,7 +223,7 @@
         dest: "{{ role_path }}/LICENSE"
         mode: "0644"
       when:
-        - generate_license
+        - generate_license | bool
 
     - name: Render file SECURITY.md
       ansible.builtin.template:
@@ -214,7 +231,7 @@
         dest: "{{ role_path }}/SECURITY.md"
         mode: "0644"
       when:
-        - generate_security
+        - generate_security | bool
 
     - name: Render file molecule/default/molecule.yml
       ansible.builtin.template:
@@ -222,7 +239,7 @@
         dest: "{{ role_path }}/molecule/default/molecule.yml"
         mode: "0644"
       when:
-        - generate_molecule
+        - generate_molecule | bool
 
     - name: Render file CONTRIBUTING.md
       ansible.builtin.template:
@@ -230,7 +247,7 @@
         dest: "{{ role_path }}/CONTRIBUTING.md"
         mode: "0644"
       when:
-        - generate_contributing
+        - generate_contributing | bool
 
     - name: Render file .github/workflows/molecule.yml
       ansible.builtin.template:
@@ -238,7 +255,7 @@
         dest: "{{ role_path }}/.github/workflows/molecule.yml"
         mode: "0644"
       when:
-        - generate_github_action_molecule
+        - generate_github_action_molecule | bool
 
     - name: Render file .github/workflows/galaxy.yml
       ansible.builtin.template:
@@ -246,7 +263,7 @@
         dest: "{{ role_path }}/.github/workflows/galaxy.yml"
         mode: "0644"
       when:
-        - generate_github_action_galaxy
+        - generate_github_action_galaxy | bool
 
     - name: Render file .github/workflows/todo.yml
       ansible.builtin.template:
@@ -254,7 +271,7 @@
         dest: "{{ role_path }}/.github/workflows/todo.yml"
         mode: "0644"
       when:
-        - generate_github_action_todo
+        - generate_github_action_todo | bool
 
     - name: Render file .gitlab-ci.yml
       ansible.builtin.template:
@@ -262,7 +279,7 @@
         dest: "{{ role_path }}/.gitlab-ci.yml"
         mode: "0644"
       when:
-        - generate_gitlab_ci
+        - generate_gitlab_ci | bool
 
     - name: Render file .github/workflows/requirements2png.yml
       ansible.builtin.template:
@@ -270,7 +287,7 @@
         dest: "{{ role_path }}/.github/workflows/requirements2png.yml"
         mode: "0644"
       when:
-        - generate_requirements2png
+        - generate_requirements2png | bool
 
     - name: Render file .github/FUNDING.yml.md
       ansible.builtin.template:
@@ -278,7 +295,7 @@
         dest: "{{ role_path }}/.github/FUNDING.yml"
         mode: "0644"
       when:
-        - generate_github_funding
+        - generate_github_funding | bool
 
     - name: Render file github/ISSUE_TEMPLATE/bug_report.md
       ansible.builtin.template:
@@ -286,7 +303,7 @@
         dest: "{{ role_path }}/.github/ISSUE_TEMPLATE/bug_report.md"
         mode: "0644"
       when:
-        - generate_github_issue_template
+        - generate_github_issue_template | bool
 
     - name: Render file .github/ISSUE_TEMPLATE/feature_request.md
       ansible.builtin.template:
@@ -294,11 +311,12 @@
         dest: "{{ role_path }}/.github/ISSUE_TEMPLATE/feature_request.md"
         mode: "0644"
       when:
-        - generate_github_feature_template
+        - generate_github_feature_template | bool
 
     - name: Install pre-commit
       ansible.builtin.command:
         cmd: pre-commit install
+        chdir: "{{ role_path }}"
         creates: .git/hooks/pre-commit
       when:
-        - generate_pre_commit
+        - generate_pre_commit | bool
