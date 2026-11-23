@@ -132,6 +132,37 @@ class GeneratorTests(unittest.TestCase):
         self.assertEqual(github["jobs"]["molecule"]["strategy"]["matrix"]["distro"], expected)
         self.assertEqual(gitlab["molecule"]["parallel"]["matrix"], expected)
 
+    def test_every_mapped_platform_has_a_docs_url_and_versions(self):
+        mappings = yaml.safe_load((ROOT / "vars/main.yml").read_text())
+        for name in mappings["platform_image_mapping"]:
+            with self.subTest(platform=name):
+                self.assertIn(name.lower(), mappings["image_docker_hub_url_mapping"])
+                self.assertIn("all", mappings["distribution_version_mapping"].get(name, {}))
+
+    def test_rocky_and_alias_platforms_generate(self):
+        role = self.clean_role("ansible-role-default")
+        self.generate(
+            role,
+            platforms=[
+                {"name": "Rocky", "versions": ["9"]},
+                {"name": "Rockylinux", "versions": ["10"]},
+                {"name": "Almalinux", "versions": ["8"]},
+            ],
+        )
+        workflow = yaml.safe_load((role / ".github/workflows/molecule.yml").read_text())
+        self.assertEqual(
+            workflow["jobs"]["molecule"]["strategy"]["matrix"]["distro"],
+            [
+                {"image": "docker-molecule-images", "tag": "rockylinux9"},
+                {"image": "docker-molecule-images", "tag": "rockylinux10"},
+                {"image": "docker-molecule-images", "tag": "almalinux8"},
+            ],
+        )
+        self.assertIn(
+            "|[Rocky](https://hub.docker.com/r/buluma/docker-molecule-images)|9|",
+            (role / "README.md").read_text(),
+        )
+
     def test_trailing_slash_in_role_path_keeps_role_name(self):
         role = self.clean_role("ansible-role-default")
         self.generate(role, role_path=f"{role}/")
