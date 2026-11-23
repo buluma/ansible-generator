@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import subprocess
 import requests
 
@@ -7,9 +8,16 @@ GH_USER = "buluma"
 # The prefix of the repositories you want to clone
 PREFIX = "ansible-role-"
 # Directory to clone into
-CLONE_DIR = "../ansible-roles"
+CLONE_DIR = Path(__file__).resolve().parent.parent / "ansible-roles"
 # Get the token from an environment variable
 GH_TOKEN = os.environ.get("GITHUB_TOKEN")
+
+# Git calls helpers with an operation such as get, store, or erase. Supply
+# the token from the environment only on get, so Git never stores it.
+GITHUB_CREDENTIAL_HELPER = (
+    '!f() { if test "$1" = get; then '
+    'printf "username=x-access-token\\npassword=%s\\n" "$GITHUB_TOKEN"; fi; }; f'
+)
 
 def get_repos():
     """
@@ -71,8 +79,17 @@ def process_repo(repo):
             print(f"Repository {repo_name} already exists. Skipping.")
         else:
             print(f"Cloning {repo_name}...")
-            https_url = repo["clone_url"].replace("https://", f"https://oauth2:{GH_TOKEN}@")
-            subprocess.run(["git", "clone", https_url, clone_path], check=True)
+            subprocess.run(
+                [
+                    "git",
+                    "-c", "credential.helper=",
+                    "-c", f"credential.https://github.com.helper={GITHUB_CREDENTIAL_HELPER}",
+                    "clone", "--", repo["clone_url"], clone_path,
+                ],
+                # Empty askpass values stop Git falling back to a GUI prompt helper.
+                env={**os.environ, "GIT_TERMINAL_PROMPT": "0", "GIT_ASKPASS": "", "SSH_ASKPASS": ""},
+                check=True,
+            )
 
 if __name__ == "__main__":
     if not os.path.exists(CLONE_DIR):

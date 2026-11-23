@@ -24,11 +24,7 @@ jobs:
           python-version: "3.13"
 
       - name: Install dependencies
-        run: pip install ansible yamllint
+        run: python -m pip install ansible-core==2.19.15 yamllint==1.35.1 requests==2.32.5
 
-      - name: Run generator against default fixture
-        working-directory: tests/ansible-role-default
-        run: ansible-playbook $GITHUB_WORKSPACE/generate.yml --extra-vars "generate_pre_commit=no"
-
-      - name: Validate generated output
-        run: yamllint -c .yamllint tests/ansible-role-default
+      - name: Test role scripts and generated output
+        run: python -m unittest discover -s tests -v

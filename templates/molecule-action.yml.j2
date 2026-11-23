@@ -43,13 +43,9 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-{% for platform in platforms %}
-{% for version in platform.versions %}
-{% for tag in distribution_version_mapping[platform.name][version] %}
-          - image: "{{ platform_image_mapping[platform.name] }}"
+{% for image, tag in molecule_platform_matrix | default([]) %}
+          - image: "{{ image }}"
             tag: "{{ tag }}"
-{% endfor %}
-{% endfor %}
 {% endfor %}
     steps:
       - name: checkout
@@ -92,3 +88,8 @@ jobs:
           image: {% raw %}${{ matrix.distro.image }}{% endraw %}
 
           tag: {% raw %}${{ matrix.distro.tag }}{% endraw %}
+
+{# Molecule inherits the step environment. Interpolating values into its YAML can break parsing. #}
+{% for item in github_variables_mapping | default([]) %}
+          {{ item.variable | to_json }}: {{ ('${{ ' ~ item.name ~ ' }}') | to_json }}
+{% endfor %}

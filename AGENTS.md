@@ -27,7 +27,7 @@ cd /path/to/your/ansible-role
 
 **Other commands:**
 
-- `python run_generator.py` runs `generate.yml` across repos in `../ansible-roles`.
+- `python run_generator.py` runs `generate.yml` across `ansible-role-*` git checkouts with `meta/main.yml` in `../ansible-roles`; `run_command_in_roles.py` is an alias for it.
 - `pre-commit run --all-files` runs YAML and Ansible hygiene checks configured in `.pre-commit-config.yaml`.
 - `yamllint -c .yamllint .` validates YAML formatting rules for this repo.
 - `cd tests/ansible-role-default && tox` runs Molecule tests (same pattern for other `tests/ansible-role-*` fixtures).
@@ -40,7 +40,7 @@ Customize behavior by modifying variables in `defaults/main.yml`. Controls which
 
 - Use 2-space YAML indentation and valid YAML document headers (`---`) where applicable.
 - Keep Jinja template names descriptive and output-oriented (example: `molecule-action.yml.j2`, `SECURITY.md.j2`).
-- Prefer snake_case for variable names in YAML/Python (`github_namespace`, `generator_path`).
+- Prefer snake_case for variable names in YAML/Python (`github_namespace`, `role_path`).
 - Run pre-commit before opening a PR; enforced checks include `yamllint`, trailing whitespace, merge conflicts, and Ansible role hygiene hooks.
 
 ## Testing Guidelines

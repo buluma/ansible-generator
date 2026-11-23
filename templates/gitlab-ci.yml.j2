@@ -19,37 +19,19 @@ molecule:
     - if: $CI_COMMIT_REF_NAME == "master"
   parallel:
     matrix:
-{% set matrix = namespace(seen=[]) %}
-{% for platform in platforms %}
-{% set platform_key = platform_name_alias_mapping.get(platform.name, platform.name) %}
-{% set image = platform_image_mapping.get(platform_key, default_matrix_image) %}
-{% set version_map = distribution_version_mapping.get(platform_key, {}) %}
-{% set fallback_tags = version_map.get('all', [default_matrix_tag]) %}
-{% for version in platform.versions %}
-{% set version_key = distribution_version_alias_mapping.get(version | string, version | string) %}
-{% set tags = version_map.get(version_key, fallback_tags) %}
-{% for tag in tags %}
-{% set matrix_key = image ~ '|' ~ tag %}
-{% if matrix_key not in matrix.seen %}
+{% set matrix = namespace(entries=molecule_platform_matrix | default([]), seen=[]) %}
+{% for item in molecule_matrix_include | default([]) %}
+{% set image = item.image | default(default_matrix_image | default(fallback_matrix_image | default('docker-molecule-images'))) %}
+{% set tag = item.tag | default(default_matrix_tag | default('latest')) %}
+{% set matrix.entries = matrix.entries + [[image, tag]] %}
+{% endfor %}
+{% for image, tag in matrix.entries %}
+{% if [image, tag] not in matrix.seen %}
       - image: "{{ image }}"
         tag: "{{ tag }}"
-{% set _ = matrix.seen.append(matrix_key) %}
+{% set matrix.seen = matrix.seen + [[image, tag]] %}
 {% endif %}
 {% endfor %}
-{% endfor %}
-{% endfor %}
-{% if molecule_matrix_include is defined %}
-{% for item in molecule_matrix_include %}
-{% set image = item.image | default(default_matrix_image) %}
-{% set tag = item.tag | default(default_matrix_tag) %}
-{% set matrix_key = image ~ '|' ~ tag %}
-{% if matrix_key not in matrix.seen %}
-      - image: "{{ image }}"
-        tag: "{{ tag }}"
-{% set _ = matrix.seen.append(matrix_key) %}
-{% endif %}
-{% endfor %}
-{% endif %}
 
 galaxy:
   image: python:3.13
