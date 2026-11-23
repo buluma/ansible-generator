@@ -1,18 +1,6 @@
 ---
 version: 2
 updates:
-  - package-ecosystem: docker
-    directory: '/'
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 5
-  - package-ecosystem: npm
-    directory: '/'
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 5
-    labels:
-      - 'type: dependencies'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
