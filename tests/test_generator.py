@@ -199,6 +199,22 @@ class GeneratorTests(unittest.TestCase):
             (role / "README.md").read_text(),
         )
 
+    def test_generated_files_end_with_one_newline(self):
+        # Generated roles run pre-commit's end-of-file-fixer, which rejects
+        # files that end without a newline or with blank lines.
+        for sponsored in (False, True):
+            with self.subTest(sponsored_message=sponsored):
+                role = self.clean_role("ansible-role-default")
+                inputs = {path for path in role.rglob("*") if path.is_file()}
+                self.generate(role, sponsored_message=sponsored)
+                for path in sorted({path for path in role.rglob("*") if path.is_file()} - inputs):
+                    text = path.read_bytes()
+                    if b"\0" in text or not text:
+                        continue
+                    relative = path.relative_to(role)
+                    self.assertTrue(text.endswith(b"\n"), relative)
+                    self.assertFalse(text.endswith(b"\n\n"), relative)
+
     def test_trailing_slash_in_role_path_keeps_role_name(self):
         role = self.clean_role("ansible-role-default")
         self.generate(role, role_path=f"{role}/")
