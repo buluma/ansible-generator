@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import shutil
 import subprocess
 
 
@@ -28,6 +29,10 @@ def run_generator():
         print(f"No active role checkouts found in {CLONE_DIR}.")
         return 0
 
+    if shutil.which("ansible-playbook") is None:
+        print("ansible-playbook was not found on PATH. Install Ansible before running the generator.")
+        return 1
+
     failed = []
     for role in roles:
         print(f"Running generator on {role.name}...", flush=True)
@@ -41,9 +46,6 @@ def run_generator():
                 check=True,
                 timeout=300,
             )
-        except FileNotFoundError as error:
-            print(f"Could not start ansible-playbook for {role.name}: {error}")
-            return 1
         except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError) as error:
             print(f"Generation failed for {role.name}: {error}")
             failed.append(role.name)

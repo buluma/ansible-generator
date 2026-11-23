@@ -38,7 +38,7 @@ cd ansible-role-my_role
 
 The generator writes files in the target role and can overwrite existing files. Review the diff after running it. Pass `--extra-vars '{"generate_pre_commit": false}'` to skip writing the pre-commit configuration and installing its Git hook.
 
-To generate files across the sibling `ansible-roles` directory, run `python run_generator.py`. The runner selects `ansible-role-*` checkouts with `meta/main.yml`, skips archived checkouts and other directories, and exits nonzero if generation fails for any role.
+To generate files across the sibling `ansible-roles` directory, run `python run_generator.py`. The runner selects `ansible-role-*` git checkouts (directories containing `.git`) with `meta/main.yml`, skips archived checkouts and other directories, keeps going when one role fails, and exits nonzero if generation fails for any role. `python run_command_in_roles.py` is an alias for the same runner and uses the same selection rules.
 
 ## Configuration
 

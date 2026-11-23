@@ -116,6 +116,28 @@ class GeneratorTests(unittest.TestCase):
             expected + [{"image": "docker-molecule-images", "tag": "extra"}],
         )
 
+    def test_overlapping_platforms_produce_each_image_and_tag_once(self):
+        role = self.clean_role("ansible-role-default")
+        self.generate(
+            role,
+            generate_gitlab_ci="yes",
+            platforms=[{"name": "EL", "versions": ["9"]}, {"name": "AlmaLinux", "versions": ["9"]}],
+        )
+        github = yaml.safe_load((role / ".github/workflows/molecule.yml").read_text())
+        gitlab = yaml.safe_load((role / ".gitlab-ci.yml").read_text())
+        expected = [
+            {"image": "docker-molecule-images", "tag": "rockylinux9"},
+            {"image": "docker-molecule-images", "tag": "almalinux9"},
+        ]
+        self.assertEqual(github["jobs"]["molecule"]["strategy"]["matrix"]["distro"], expected)
+        self.assertEqual(gitlab["molecule"]["parallel"]["matrix"], expected)
+
+    def test_trailing_slash_in_role_path_keeps_role_name(self):
+        role = self.clean_role("ansible-role-default")
+        self.generate(role, role_path=f"{role}/")
+        workflow = yaml.safe_load((role / ".github/workflows/molecule.yml").read_text())
+        self.assertEqual(workflow["jobs"]["molecule"]["steps"][0]["with"]["path"], role.name)
+
     def test_requirements_workflow_can_be_generated_on_its_own(self):
         role = self.clean_role("ansible-role-minimal")
         self.generate(

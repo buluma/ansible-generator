@@ -27,7 +27,10 @@ class RoleScriptTests(unittest.TestCase):
                 {"name": "ansible-role-demo", "archived": False, "clone_url": url}
             )
             command = clone.call_args.args[0]
+            env = clone.call_args.kwargs["env"]
             self.assertIn(url, command)
+            for name in ("GIT_ASKPASS", "SSH_ASKPASS"):
+                self.assertEqual(env[name], "", name)
             self.assertNotIn("test-token", " ".join(command))
 
         # Exercise Git's credential protocol locally without cloning or contacting GitHub.
@@ -39,7 +42,7 @@ class RoleScriptTests(unittest.TestCase):
                     input=f"protocol=https\nhost={host}\n\n",
                     capture_output=True,
                     text=True,
-                    env={**os.environ, "GITHUB_TOKEN": "test-token", "GIT_TERMINAL_PROMPT": "0"},
+                    env={**env, "GITHUB_TOKEN": "test-token"},
                     timeout=10,
                 )
                 if host == "github.com":
@@ -61,6 +64,7 @@ class RoleScriptTests(unittest.TestCase):
             output = io.StringIO()
             with (
                 patch.object(run_generator, "CLONE_DIR", root),
+                patch.object(run_generator.shutil, "which", return_value="/usr/bin/ansible-playbook"),
                 patch.object(
                     run_generator.subprocess, "run",
                     side_effect=[subprocess.CalledProcessError(2, ["ansible-playbook"]), None],
@@ -75,3 +79,44 @@ class RoleScriptTests(unittest.TestCase):
             for call in run.call_args_list:
                 self.assertEqual(json.loads(call.args[0][-1])["role_path"], str(call.kwargs["cwd"]))
             self.assertIn("Failed roles: ansible-role-alpha", output.getvalue())
+
+    def make_roles(self, root, *names):
+        for name in names:
+            role = root / name
+            (role / ".git").mkdir(parents=True)
+            (role / "meta").mkdir()
+            (role / "meta/main.yml").touch()
+
+    def test_batch_continues_when_a_role_disappears_during_the_run(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.make_roles(root, "ansible-role-alpha", "ansible-role-beta")
+            output = io.StringIO()
+            with (
+                patch.object(run_generator, "CLONE_DIR", root),
+                patch.object(run_generator.shutil, "which", return_value="/usr/bin/ansible-playbook"),
+                patch.object(
+                    run_generator.subprocess, "run",
+                    side_effect=[FileNotFoundError(2, "No such file or directory"), None],
+                ) as run,
+                redirect_stdout(output),
+            ):
+                self.assertEqual(run_generator.run_generator(), 1)
+            self.assertEqual(run.call_count, 2)
+            self.assertIn("Failed roles: ansible-role-alpha", output.getvalue())
+            self.assertNotIn("Could not start ansible-playbook", output.getvalue())
+
+    def test_batch_stops_before_running_when_ansible_playbook_is_missing(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.make_roles(root, "ansible-role-alpha")
+            output = io.StringIO()
+            with (
+                patch.object(run_generator, "CLONE_DIR", root),
+                patch.object(run_generator.shutil, "which", return_value=None),
+                patch.object(run_generator.subprocess, "run") as run,
+                redirect_stdout(output),
+            ):
+                self.assertEqual(run_generator.run_generator(), 1)
+            run.assert_not_called()
+            self.assertIn("ansible-playbook was not found", output.getvalue())

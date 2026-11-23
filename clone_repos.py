@@ -86,7 +86,8 @@ def process_repo(repo):
                     "-c", f"credential.https://github.com.helper={GITHUB_CREDENTIAL_HELPER}",
                     "clone", "--", repo["clone_url"], clone_path,
                 ],
-                env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
+                # Empty askpass values stop Git falling back to a GUI prompt helper.
+                env={**os.environ, "GIT_TERMINAL_PROMPT": "0", "GIT_ASKPASS": "", "SSH_ASKPASS": ""},
                 check=True,
             )
 
