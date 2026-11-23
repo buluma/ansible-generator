@@ -133,7 +133,7 @@ class GeneratorTests(unittest.TestCase):
         self.assertEqual(gitlab_install.split()[2:], github_install.split()[2:])
 
         requirements2png = (role / ".github/workflows/requirements2png.yml").read_text()
-        self.assertRegex(requirements2png, r"uses: ad-m/github-push-action@[0-9a-f]{40} # v\d")
+        self.assertRegex(requirements2png, r"uses: ad-m/github-push-action@[0-9a-f]{40}  # v\d")
 
     def test_gitlab_and_github_share_platform_matrix_with_gitlab_overrides(self):
         role = self.clean_role("ansible-role-default")
