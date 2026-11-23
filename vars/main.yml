@@ -58,6 +58,7 @@ image_docker_hub_url_mapping:
   ubuntu: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   almalinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   rockylinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
+  rocky: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   oraclelinux: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
   rhel-ubi: "https://hub.docker.com/r/{{ docker_namespace }}/docker-molecule-images"
 
@@ -71,7 +72,7 @@ distribution_version_mapping:
   Alpine:
     all:
       - alpine-openrc
-  AlmaLinux:
+  AlmaLinux: &almalinux_versions
     all:
       - almalinux10  # 10
       - almalinux9   # 9
@@ -165,7 +166,7 @@ distribution_version_mapping:
       - oraclelinux9
     "8":
       - oraclelinux8
-  Rocky:
+  Rocky: &rocky_versions
     all:
       - rockylinux10
       - rockylinux9
@@ -176,6 +177,10 @@ distribution_version_mapping:
       - rockylinux9
     "10":
       - rockylinux10
+  # Alternate spellings accepted by platform_image_mapping share the
+  # canonical version lists, so validation passes for either name.
+  Rockylinux: *rocky_versions
+  Almalinux: *almalinux_versions
   # SLES intentionally omitted: sles12/sles15 in docker-molecule-images
   # require a paid SUSE subscription to pull the base image (see that
   # repo's sles12/README.md) - CI on this platform can never go green
