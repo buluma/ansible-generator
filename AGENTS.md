@@ -9,7 +9,6 @@ An Ansible-based tool that generates documentation and CI files for an Ansible R
 - `generate.yml` is the core playbook; it reads role metadata and renders files from `templates/*.j2`.
 - `defaults/main.yml` and `vars/main.yml` define generator defaults and shared variables.
 - `files/` contains static files copied into target roles (for example `.gitignore`, `.yamllint`, and PR templates).
-- `workflows/` holds standalone `shellcheck` and `yamllint` workflows; `generate.yml` does not read it. Generated workflows come from `templates/*.j2`.
 - `tests/` contains the unittest suite (`test_generator.py`, `test_role_scripts.py`) and the fixture roles (`ansible-role-default`, `ansible-role-minimal`, etc.) it renders.
 - Utility scripts: `run_generator.py`, `clone_repos.py`, and `run_command_in_roles.py` automate batch generation tasks.
 
