@@ -120,6 +120,21 @@ class GeneratorTests(unittest.TestCase):
         bug_report = (role / ".github/ISSUE_TEMPLATE/bug_report.md").read_text()
         self.assertNotIn("CentOS 7", bug_report)
 
+    def test_generated_ci_pins_its_tools(self):
+        role = self.clean_role("ansible-role-default")
+        self.generate(role, generate_gitlab_ci="yes")
+        github = yaml.safe_load((role / ".github/workflows/molecule.yml").read_text())
+        gitlab = yaml.safe_load((role / ".gitlab-ci.yml").read_text())
+        github_install = next(
+            line for step in github["jobs"]["molecule"]["steps"]
+            for line in step.get("run", "").splitlines() if line.strip().startswith("pip3 install")
+        )
+        gitlab_install = next(line for line in gitlab["molecule"]["script"] if line.startswith("pip3 install"))
+        self.assertEqual(gitlab_install.split()[2:], github_install.split()[2:])
+
+        requirements2png = (role / ".github/workflows/requirements2png.yml").read_text()
+        self.assertRegex(requirements2png, r"uses: ad-m/github-push-action@[0-9a-f]{40} # v\d")
+
     def test_gitlab_and_github_share_platform_matrix_with_gitlab_overrides(self):
         role = self.clean_role("ansible-role-default")
         self.generate(

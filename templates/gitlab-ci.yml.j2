@@ -12,7 +12,7 @@ molecule:
     - echo '{"features":{"buildkit":true},"exec-opts":["native.cgroupdriver=systemd"]}' > /etc/docker/daemon.json
     - service docker restart || true
     - python -m pip install --upgrade pip
-    - pip3 install ansible molecule molecule-plugins[docker] docker
+    - pip3 install "ansible=={{ molecule_ansible_version }}" "molecule==26.11.0" "molecule-plugins[docker]==26.11.0" "docker==7.2.0"
     - cd $CI_PROJECT_DIR
     - molecule test
   rules:
