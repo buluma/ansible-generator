@@ -1,6 +1,10 @@
 ---
 # Setting to generate files.
 
+# The ansible release the generated Molecule workflow installs. SECURITY.md
+# lists its major version as the supported one, so bump both together here.
+molecule_ansible_version: "15.0.0"
+
 # A list of python version to test.
 default_python_version:
   - "python:3.10"

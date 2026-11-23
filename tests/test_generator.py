@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -98,6 +99,26 @@ class GeneratorTests(unittest.TestCase):
                     self.assertEqual(env["someTHING"], "${{ secrets.MY_VAR }}")
                     molecule = yaml.safe_load((role / "molecule/default/molecule.yml").read_text())
                     self.assertNotIn("env", molecule["provisioner"])
+
+    def test_contributor_docs_match_the_generated_ci(self):
+        role = self.clean_role("ansible-role-default")
+        self.generate(role)
+        workflow = (role / ".github/workflows/molecule.yml").read_text()
+        ansible_major = re.search(r'"ansible==(\d+)\.', workflow).group(1)
+
+        security = (role / "SECURITY.md").read_text()
+        self.assertRegex(security, rf"\| {ansible_major} +\| :white_check_mark: +\|")
+        self.assertNotIn("Tell them where to go", security)
+        self.assertIn("(#reporting-a-vulnerability)", security)
+
+        contributing = (role / "CONTRIBUTING.md").read_text()
+        self.assertIn("pip install molecule molecule-plugins[docker] ansible-lint docker", contributing)
+        self.assertIn("image=docker-molecule-images tag=debian13 molecule test", contributing)
+        for stale in ("Travis", "centos", "help.github.com", "services.github.com"):
+            self.assertNotIn(stale, contributing)
+
+        bug_report = (role / ".github/ISSUE_TEMPLATE/bug_report.md").read_text()
+        self.assertNotIn("CentOS 7", bug_report)
 
     def test_gitlab_and_github_share_platform_matrix_with_gitlab_overrides(self):
         role = self.clean_role("ansible-role-default")
