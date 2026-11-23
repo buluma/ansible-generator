@@ -1,8 +1,0 @@
----
-#
-# Ansible managed
-#
-repository:
-  description: Install and configure minimal on your system.
-  homepage: https://buluma.github.io/
-  topics: minimal, ansible, molecule, playbook
